@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "699276632384",
+    "project_id": "exhbuy",
+    "storage_bucket": "exhbuy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699276632384:android:f1e49ff0d98f2b827b1aa5",
+        "android_client_info": {
+          "package_name": "com.mazer.exhbuy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "699276632384-0ll5u4cpth3pfsdr76o46ls4m2il1ocf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVjKvCGOmV7GZqWRLaEGH9xd0DkPow4nE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "699276632384-0ll5u4cpth3pfsdr76o46ls4m2il1ocf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
