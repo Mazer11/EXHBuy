@@ -20,9 +20,9 @@ import com.mazer.exhbuy.EXHBuyNav
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         EXHBuyNav.HOME,
+        EXHBuyNav.SALE,
         EXHBuyNav.CREATING,
         EXHBuyNav.ACCOUNT,
-        EXHBuyNav.SETTINGS,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

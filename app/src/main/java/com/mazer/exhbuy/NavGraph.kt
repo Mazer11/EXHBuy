@@ -16,6 +16,10 @@ fun NavGraph(navController: NavHostController) {
             AccountScreen()
         }
 
+        composable(route = EXHBuyNav.SALE.route){
+            SaleScreen()
+        }
+
         composable(route = EXHBuyNav.AUTHENTICATION.route) {
             AuthenticationScreen()
         }
