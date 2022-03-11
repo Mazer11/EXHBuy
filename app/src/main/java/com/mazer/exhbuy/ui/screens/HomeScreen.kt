@@ -1,4 +1,4 @@
-package com.mazer.exhbuy.screens
+package com.mazer.exhbuy.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +22,7 @@ fun HomeScreen() {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
-            HomeChips(chipsLabels = listOf(Chip("Label"), Chip("Label 2")))
+            HomeChips()
             EventCard()
             EventCard()
             EventCard()

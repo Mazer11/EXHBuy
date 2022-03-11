@@ -10,19 +10,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.mazer.exhbuy.data.Chip
 import com.mazer.exhbuy.ui.theme.AppTypography
 
 @Composable
-fun HomeChips(
-    chipsLabels: List<Chip>
-) {
-    var isSomeChipSelected by remember { mutableStateOf(false) }
+fun HomeChips() {
+    val labels = listOf(
+        "Label 1",
+        "Label 2",
+        "Label 3",
+        "Label 4",
+        "Label 5",
+        "Label 6",
+        "Label 7",
+        "Label 8",
+    )
+    var labelIndex by remember { mutableStateOf(0) }
 
     LazyRow(
         state = rememberLazyListState(),
@@ -31,13 +37,16 @@ fun HomeChips(
             .wrapContentHeight()
             .padding(vertical = 4.dp, horizontal = 16.dp)
     ) {
-        items(
-            items = chipsLabels
-        ) {
-            FilterChip(
-                label = it.label,
-                onChipClick = {},
-            )
+        item {
+            labels.forEachIndexed { index, title ->
+                FilterChip(
+                    label = title,
+                    clicked = index == labelIndex,
+                    onChipClick = {
+                        labelIndex = index
+                    }
+                )
+            }
         }
     }
 }
@@ -45,14 +54,14 @@ fun HomeChips(
 @Composable
 fun FilterChip(
     label: String,
+    clicked: Boolean,
     onChipClick: () -> Unit
 ) {
-    var isSelected by remember { mutableStateOf(false) }
     val color: Color
     val borderColor: Color
     val contentColor: Color
 
-    if (isSelected) {
+    if (clicked) {
         color = MaterialTheme.colorScheme.secondaryContainer
         borderColor = Color.Transparent
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -77,7 +86,6 @@ fun FilterChip(
             )
             .clickable {
                 onChipClick()
-                isSelected = !isSelected
             }
     ) {
         Column(

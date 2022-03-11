@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mazer.exhbuy.screens.*
+import com.mazer.exhbuy.ui.screens.*
 
 @Composable
 fun NavGraph(navController: NavHostController) {

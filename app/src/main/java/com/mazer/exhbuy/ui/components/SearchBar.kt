@@ -12,8 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mazer.exhbuy.ui.theme.AppTypography
+import com.mazer.exhbuy.ui.theme.Roboto
 
 
 @Composable
@@ -33,7 +37,14 @@ fun SearchBar(
                 onSearch(it)
             },
             singleLine = true,
-            textStyle = AppTypography.titleMedium,
+            textStyle = TextStyle(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontFamily = Roboto,
+                fontWeight = FontWeight.W400,
+                fontSize = 16.sp,
+                lineHeight = 24.sp,
+                letterSpacing = 0.5.sp,
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
