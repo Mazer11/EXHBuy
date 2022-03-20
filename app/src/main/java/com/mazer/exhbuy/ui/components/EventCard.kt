@@ -6,13 +6,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mazer.exhbuy.data.EventData
 import com.mazer.exhbuy.ui.theme.AppTypography
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
-fun EventCard() {
+fun EventCard(
+    event: EventData
+) {
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
@@ -29,21 +31,21 @@ fun EventCard() {
                 modifier = Modifier.weight(3f)
             ) {
                 Text(
-                    text = "Date and time",
+                    text = "${event.startDate} - ${event.endDate}",
                     color = MaterialTheme.colorScheme.tertiary,
                     style = AppTypography.titleSmall
                 )
                 Text(
-                    text = "Title",
+                    text = event.eventName,
                     style = AppTypography.titleMedium
                 )
                 Text(
-                    text = "Place",
+                    text = event.location,
                     style = AppTypography.titleSmall
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "1000 - 1000 Price",
+                    text = "${event.price} $",
                     style = AppTypography.titleMedium
                 )
             }
@@ -59,37 +61,3 @@ fun EventCard() {
         }
     }
 }
-
-@Preview(
-    name = "Light Theme"
-)
-@Composable
-fun EventCardPreview() {
-    EventCard()
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
