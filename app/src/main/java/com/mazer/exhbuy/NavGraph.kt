@@ -1,11 +1,13 @@
 package com.mazer.exhbuy
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mazer.exhbuy.screens.*
+import com.mazer.exhbuy.ui.screens.*
 
+@ExperimentalMaterial3Api
 @Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(
@@ -16,15 +18,15 @@ fun NavGraph(navController: NavHostController) {
             AccountScreen()
         }
 
-        composable(route = EXHBuyNav.AUTHENTICATION.route) {
-            AuthenticationScreen()
+        composable(route = EXHBuyNav.SALE.route) {
+            SaleScreen()
         }
 
         composable(route = EXHBuyNav.HOME.route) {
             HomeScreen()
         }
 
-        composable(route = EXHBuyNav.SETTINGS.route){
+        composable(route = EXHBuyNav.SETTINGS.route) {
             SettingsScreen()
         }
 

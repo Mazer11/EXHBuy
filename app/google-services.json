@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "699276632384",
+    "firebase_url": "https://exhbuy-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "exhbuy",
     "storage_bucket": "exhbuy.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "699276632384-nffagtggkes1k5lgpu4719hmfaqq1cpo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mazer.exhbuy",
+            "certificate_hash": "7ef896f0f79bfcf56264e559b3a25f32ea5a46a4"
+          }
+        },
         {
           "client_id": "699276632384-0ll5u4cpth3pfsdr76o46ls4m2il1ocf.apps.googleusercontent.com",
           "client_type": 3
