@@ -23,7 +23,7 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(route = EXHBuyNav.HOME.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
 
         composable(route = EXHBuyNav.SETTINGS.route) {

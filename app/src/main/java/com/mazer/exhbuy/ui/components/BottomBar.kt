@@ -19,16 +19,15 @@ import com.mazer.exhbuy.EXHBuyNav
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         EXHBuyNav.HOME,
-        EXHBuyNav.SALE,
         EXHBuyNav.CREATING,
-        EXHBuyNav.ACCOUNT,
+        EXHBuyNav.SALE,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     var bottomBarSize by remember { mutableStateOf(70.dp) }
     bottomBarSize = if (currentDestination?.route !in listOf(
-            "home", "account", "creating", "sale"
+            "home", "creating", "sale"
         )
     )
         0.dp
