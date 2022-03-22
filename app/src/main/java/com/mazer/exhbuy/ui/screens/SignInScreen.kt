@@ -29,7 +29,6 @@ import com.mazer.exhbuy.EXHBuyNav
 import com.mazer.exhbuy.MainActivity
 import com.mazer.exhbuy.R
 import com.mazer.exhbuy.ui.components.MyTextField
-import com.mazer.exhbuy.ui.theme.AppTypography
 import com.mazer.exhbuy.ui.theme.EXHBuyTheme
 import java.util.concurrent.TimeUnit
 
@@ -42,8 +41,15 @@ class SignInActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            EXHBuyTheme {
-                ChooseSignInType()
+            if(mAuth.currentUser != null){
+                val i = Intent(this, MainActivity::class.java)
+                startActivity(i)
+                finish()
+            }
+            else {
+                EXHBuyTheme {
+                    ChooseSignInType()
+                }
             }
         }
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -55,7 +61,19 @@ class SignInActivity: ComponentActivity() {
                 }
             } catch (e: ApiException){
                 Log.d("GoogleSignIn", "Api exception")
+                Toast.makeText(
+                    applicationContext,
+                    "Can't authenticate with Google",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+        }
+    }
+
+    private fun checkAuthState(){
+        if(mAuth.currentUser != null){
+            val i = Intent(this, MainActivity::class.java)
+            startActivity(i)
         }
     }
 
@@ -104,7 +122,6 @@ class SignInActivity: ComponentActivity() {
     @ExperimentalMaterial3Api
     @Composable
     fun PhoneSignInScreen() {
-        val context = LocalContext.current
         var otpVal = ""
         var phoneNumber by remember { mutableStateOf("") }
 
@@ -155,19 +172,6 @@ class SignInActivity: ComponentActivity() {
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = {
-                        val intent = Intent(context, MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                ) {
-                    Text(
-                        text = "Sign In",
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        style = AppTypography.titleMedium,
-                    )
-                }
             }
         }
     }
@@ -187,6 +191,7 @@ class SignInActivity: ComponentActivity() {
                         "Verification Completed",
                         Toast.LENGTH_SHORT
                     ).show()
+                    checkAuthState()
                 }
 
                 override fun onVerificationFailed(p0: FirebaseException) {
@@ -259,8 +264,7 @@ class SignInActivity: ComponentActivity() {
                         "Verification Successful",
                         Toast.LENGTH_SHORT
                     ).show()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    checkAuthState()
                 } else
                     Toast.makeText(
                         applicationContext,
