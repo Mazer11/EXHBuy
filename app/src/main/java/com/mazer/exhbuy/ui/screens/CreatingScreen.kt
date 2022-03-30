@@ -1,12 +1,14 @@
 package com.mazer.exhbuy.ui.screens
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.mazer.exhbuy.data.DatabaseReferences
 import com.mazer.exhbuy.data.EventData
@@ -16,8 +18,8 @@ import com.mazer.exhbuy.ui.theme.AppTypography
 @ExperimentalMaterial3Api
 @Composable
 fun CreatingScreen() {
-    val db = Firebase.database("https://exhbuy-default-rtdb.europe-west1.firebasedatabase.app/")
-    val myRef = db.getReference(DatabaseReferences.EVENTS.reference)
+    val db = Firebase.firestore
+    val dbCollection = db.collection("Events")
 
     var eventName by remember { mutableStateOf("") }
     var eventLocation by remember { mutableStateOf("") }
@@ -89,16 +91,34 @@ fun CreatingScreen() {
             )
             Button(
                 onClick = {
-                    myRef.child(eventName).setValue(
-                        EventData(
-                            eventName = eventName,
-                            location = eventLocation,
-                            ticketsCount = ticketsCount.toInt(),
-                            startDate = startDate,
-                            endDate = endDate,
-                            price = price.toInt()
+                    if(
+                        eventName != "" &&
+                        eventLocation != "" &&
+                        ticketsCount !=  "-1" &&
+                        startDate != "" &&
+                        endDate != "" &&
+                                price != "-1"
+                    ) {
+                        dbCollection.add(
+                            EventData(
+                                eventName = eventName,
+                                location = eventLocation,
+                                ticketsCount = ticketsCount.toInt(),
+                                startDate = startDate,
+                                endDate = endDate,
+                                price = price.toInt()
+                            )
                         )
-                    )
+                            .addOnSuccessListener { documentReference ->
+                                Log.d(
+                                    TAG,
+                                    "DocumentSnapshot added with ID: ${documentReference.id}"
+                                )
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }
+                    }
                 }
             ) {
                 Text(

@@ -1,10 +1,10 @@
 buildscript {
     ext {
-        compose_version = '1.2.0-alpha03'
+        compose_version = '1.2.0-alpha06'
         kotlin_version = '1.6.10'
         coroutines_version = '1.6.0-native-mt'
         google_services_version = "4.3.10"
-        gradle_version = "7.1.1"
+        gradle_version = '7.1.2'
         live_data_version = "2.4.0"
         activity_compose_version = "1.4.0"
         firebase_bom_version = "29.2.0"

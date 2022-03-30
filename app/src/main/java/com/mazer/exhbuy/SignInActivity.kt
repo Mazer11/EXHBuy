@@ -1,4 +1,4 @@
-package com.mazer.exhbuy.ui.screens
+package com.mazer.exhbuy
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,12 +8,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -25,10 +26,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import com.mazer.exhbuy.EXHBuyNav
-import com.mazer.exhbuy.MainActivity
-import com.mazer.exhbuy.R
 import com.mazer.exhbuy.ui.components.MyTextField
+import com.mazer.exhbuy.ui.screens.LogInScreen
+import com.mazer.exhbuy.ui.theme.AppTypography
 import com.mazer.exhbuy.ui.theme.EXHBuyTheme
 import java.util.concurrent.TimeUnit
 
@@ -74,6 +74,7 @@ class SignInActivity: ComponentActivity() {
         if(mAuth.currentUser != null){
             val i = Intent(this, MainActivity::class.java)
             startActivity(i)
+            finish()
         }
     }
 
@@ -136,13 +137,29 @@ class SignInActivity: ComponentActivity() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    MyTextField(
-                        hint = "Enter phone number...",
-                        isNumericInput = true,
-                        onTextValueChange = {
-                            phoneNumber = it
+                    Row {
+                        Box(
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceVariant,
+                                    RoundedCornerShape(8.dp)
+                                )
+                                .padding(horizontal = 16.dp, vertical = 12.dp)
+                        ) {
+                            Text(
+                                text = "+7",
+                                style = AppTypography.bodyLarge
+                            )
                         }
-                    )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        MyTextField(
+                            hint = "Enter phone number...",
+                            isNumericInput = true,
+                            onTextValueChange = {
+                                phoneNumber = it
+                            }
+                        )
+                    }
                     Button(
                         onClick = {
                             if (phoneNumber.isNotEmpty())
@@ -279,7 +296,7 @@ class SignInActivity: ComponentActivity() {
     fun SignInNavGraph(navController: NavHostController) {
         NavHost(
             navController = navController,
-            startDestination = EXHBuyNav.SIGNINCHOOSE.route
+            startDestination = EXHBuyNav.LOGIN.route
         ) {
             composable(route = EXHBuyNav.SIGNINCHOOSE.route) {
                 ChooseSignInTypeScreen(navController)
@@ -287,6 +304,10 @@ class SignInActivity: ComponentActivity() {
 
             composable(route = EXHBuyNav.PHONESIGNIN.route) {
                 PhoneSignInScreen()
+            }
+
+            composable(route = EXHBuyNav.LOGIN.route) {
+                LogInScreen(navController)
             }
         }
     }

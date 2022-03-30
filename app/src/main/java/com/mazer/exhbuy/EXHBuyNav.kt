@@ -68,4 +68,8 @@ sealed class EXHBuyNav(
     object PHONESIGNIN: EXHBuyNav(
         route = "phoneSignIn"
     )
+
+    object LOGIN: EXHBuyNav(
+        route = "LogIn"
+    )
 }

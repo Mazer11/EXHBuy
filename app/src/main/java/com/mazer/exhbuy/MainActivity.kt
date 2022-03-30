@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.*
 import com.google.firebase.auth.FirebaseAuth
-import com.mazer.exhbuy.ui.screens.SignInActivity
 import com.mazer.exhbuy.ui.theme.EXHBuyTheme
 
 class MainActivity : ComponentActivity() {

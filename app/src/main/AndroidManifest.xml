@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EXHBuy">
         <activity
-            android:name=".ui.screens.SignInActivity"
+            android:name=".SignInActivity"
             android:exported="true"
             android:theme="@style/Theme.EXHBuy">
             <intent-filter>
