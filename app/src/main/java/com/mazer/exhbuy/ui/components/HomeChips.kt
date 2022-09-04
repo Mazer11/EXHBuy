@@ -18,6 +18,7 @@ import com.mazer.exhbuy.ui.theme.AppTypography
 
 @Composable
 fun HomeChips() {
+    //temp
     val labels = listOf(
         "Label 1",
         "Label 2",

@@ -1,4 +1,4 @@
-package com.mazer.exhbuy.ui.screens
+package com.mazer.exhbuy.ui.screens.acconunt
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

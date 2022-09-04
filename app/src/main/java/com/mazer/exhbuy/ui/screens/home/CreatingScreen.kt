@@ -1,4 +1,4 @@
-package com.mazer.exhbuy.ui.screens
+package com.mazer.exhbuy.ui.screens.home
 
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -10,12 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.mazer.exhbuy.data.DatabaseReferences
-import com.mazer.exhbuy.data.EventData
+import com.mazer.exhbuy.data.model.EventData
 import com.mazer.exhbuy.ui.components.MyTextField
 import com.mazer.exhbuy.ui.theme.AppTypography
 
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreatingScreen() {
     val db = Firebase.firestore
@@ -35,7 +34,9 @@ fun CreatingScreen() {
     Scaffold {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(all = 16.dp)
+            modifier = Modifier
+                .padding(it)
+                .padding(all = 16.dp)
         ) {
             //Event Name
             MyTextField(
@@ -91,13 +92,13 @@ fun CreatingScreen() {
             )
             Button(
                 onClick = {
-                    if(
+                    if (
                         eventName != "" &&
                         eventLocation != "" &&
-                        ticketsCount !=  "-1" &&
+                        ticketsCount != "-1" &&
                         startDate != "" &&
                         endDate != "" &&
-                                price != "-1"
+                        price != "-1"
                     ) {
                         dbCollection.add(
                             EventData(

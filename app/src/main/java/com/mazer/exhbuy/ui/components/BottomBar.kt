@@ -13,14 +13,14 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.mazer.exhbuy.EXHBuyNav
+import com.mazer.exhbuy.ui.navigation.NavigationRouts
 
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
-        EXHBuyNav.HOME,
-        EXHBuyNav.CREATING,
-        EXHBuyNav.SALE,
+        NavigationRouts.HOME,
+        NavigationRouts.CREATING,
+        NavigationRouts.SALE,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -49,7 +49,7 @@ fun BottomBar(navController: NavHostController) {
 
 @Composable
 fun RowScope.AddItem(
-    screen: EXHBuyNav,
+    screen: NavigationRouts,
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {

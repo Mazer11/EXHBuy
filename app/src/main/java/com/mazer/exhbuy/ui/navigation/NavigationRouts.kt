@@ -1,4 +1,4 @@
-package com.mazer.exhbuy
+package com.mazer.exhbuy.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -7,69 +7,56 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 
-sealed class EXHBuyNav(
+sealed class NavigationRouts(
     val route: String,
     val icon: ImageVector? = null
 ) {
     //App navigation
-    object ACCOUNT : EXHBuyNav(
+    object ACCOUNT : NavigationRouts(
         route = "account",
         icon = Icons.Default.Face
     )
 
-    object CREATING : EXHBuyNav(
+    object CREATING : NavigationRouts(
         route = "creating",
         icon = Icons.Default.Add
     )
 
-    object EXHIBITION : EXHBuyNav(
+    object EXHIBITION : NavigationRouts(
         route = "exhibition"
     )
 
-    object SALE : EXHBuyNav(
+    object SALE : NavigationRouts(
         route = "sale",
         icon = Icons.Default.ShoppingCart
     )
 
-    object FAVORITE : EXHBuyNav(
+    object FAVORITE : NavigationRouts(
         route = "favorite"
     )
 
-    object HISTORY : EXHBuyNav(
+    object HISTORY : NavigationRouts(
         route = "history"
     )
 
-    object HOME : EXHBuyNav(
+    object HOME : NavigationRouts(
         route = "home",
         icon = Icons.Default.Home
     )
 
-    object REGISTRATION : EXHBuyNav(
+    object REGISTRATION : NavigationRouts(
         route = "registration"
     )
 
-    object SETTINGS : EXHBuyNav(
+    object SETTINGS : NavigationRouts(
         route = "settings"
     )
 
-    object SEARCHING : EXHBuyNav(
+    object SEARCHING : NavigationRouts(
         route = "searching"
     )
 
-    //SignIn navigation
-    object SIGNINCHOOSE: EXHBuyNav(
-        route = "signInChoose"
-    )
-
-    object GOOGLESIGNIN: EXHBuyNav(
-        route = "googleSignIn"
-    )
-
-    object PHONESIGNIN: EXHBuyNav(
-        route = "phoneSignIn"
-    )
-
-    object LOGIN: EXHBuyNav(
+    object LOGIN: NavigationRouts(
         route = "LogIn"
     )
 }

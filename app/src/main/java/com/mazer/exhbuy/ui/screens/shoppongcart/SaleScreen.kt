@@ -1,4 +1,4 @@
-package com.mazer.exhbuy.ui.screens
+package com.mazer.exhbuy.ui.screens.shoppongcart
 
 import androidx.compose.runtime.Composable
 

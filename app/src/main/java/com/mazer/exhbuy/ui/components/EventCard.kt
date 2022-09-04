@@ -7,7 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mazer.exhbuy.data.EventData
+import com.mazer.exhbuy.data.model.EventData
 import com.mazer.exhbuy.ui.theme.AppTypography
 
 @ExperimentalMaterial3Api

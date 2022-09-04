@@ -1,9 +1,8 @@
-package com.mazer.exhbuy.data
+package com.mazer.exhbuy.data.db
 
-import android.widget.Toast
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObjects
+import com.mazer.exhbuy.data.model.EventData
 
 object FirestoreDao {
 
