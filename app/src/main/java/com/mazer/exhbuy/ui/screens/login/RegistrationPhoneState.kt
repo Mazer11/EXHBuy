@@ -13,13 +13,13 @@ import androidx.core.app.ComponentActivity
 import androidx.navigation.NavController
 import com.mazer.exhbuy.ui.components.MyTextField
 import com.mazer.exhbuy.ui.theme.AppTypography
-import com.mazer.exhbuy.viewmodels.RegistrationVM
+import com.mazer.exhbuy.viewmodels.HomeVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationPhoneState(
     currentState: MutableState<String>,
-    vm: RegistrationVM,
+    vm: HomeVM,
     activity: ComponentActivity,
     navController: NavController
 ) {

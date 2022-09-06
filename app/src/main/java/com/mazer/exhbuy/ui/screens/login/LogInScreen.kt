@@ -14,15 +14,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import com.mazer.exhbuy.ui.components.MyTextField
-import com.mazer.exhbuy.viewmodels.RegistrationVM
+import com.mazer.exhbuy.viewmodels.HomeVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LogInScreen(
     navController: NavController,
-    vm: RegistrationVM
+    vm: HomeVM
 ) {
-    Log.d("StartApp", "In LogInScreen")
     var password by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
 

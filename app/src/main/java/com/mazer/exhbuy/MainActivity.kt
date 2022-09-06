@@ -23,19 +23,22 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var application: EXHBuyApp
 
-    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             val navController = rememberNavController()
-            Log.d("StartApp", "In Main")
 
             EXHBuyTheme(
                 useDarkTheme = isSystemInDarkTheme()
             ) {
                 Scaffold(
-                    bottomBar = { BottomBar(navController = navController) }
+                    bottomBar = {
+                        BottomBar(
+                            navController = navController,
+                        )
+                    }
                 ) {
                     NavGraph(
                         navController = navController,

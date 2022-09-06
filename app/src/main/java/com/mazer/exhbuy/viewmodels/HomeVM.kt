@@ -5,6 +5,8 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ComponentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -12,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import com.mazer.exhbuy.EXHBuyApp
 import com.mazer.exhbuy.R
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,11 +22,14 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class RegistrationVM @Inject constructor() : ViewModel() {
+class HomeVM @Inject constructor() : ViewModel() {
 
     lateinit var launcher: ActivityResultLauncher<Intent>
     private val mAuth = FirebaseAuth.getInstance()
     var verificationOtp = ""
+
+    @Inject
+    lateinit var application: EXHBuyApp
 
 //    init {
 //        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
