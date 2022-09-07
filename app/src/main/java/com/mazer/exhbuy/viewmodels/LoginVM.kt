@@ -8,6 +8,7 @@ import androidx.core.app.ComponentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,20 +19,29 @@ import com.mazer.exhbuy.EXHBuyApp
 import com.mazer.exhbuy.R
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeVM @Inject constructor() : ViewModel() {
+class LoginVM @Inject constructor() : ViewModel() {
 
     lateinit var launcher: ActivityResultLauncher<Intent>
     private val mAuth = FirebaseAuth.getInstance()
     var verificationOtp = ""
 
+    private val _isLoadingState: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+    val isLoadingState: LiveData<Boolean> = _isLoadingState
+
     @Inject
     lateinit var application: EXHBuyApp
 
-//    init {
+    init {
+        _isLoadingState.value = true
+
 //        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 //            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
 //            try {
@@ -48,7 +58,13 @@ class HomeVM @Inject constructor() : ViewModel() {
 //                ).show()
 //            }
 //        }
-//    }
+
+        viewModelScope.launch {
+            delay(1000)
+            _isLoadingState.value = false
+        }
+
+    }
 
     fun sendPhone(
         phoneNumber: String,

@@ -5,11 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.app.ComponentActivity
 import androidx.navigation.NavController
-import com.mazer.exhbuy.viewmodels.HomeVM
+import com.mazer.exhbuy.viewmodels.LoginVM
 
 @Composable
 fun RegistrationScreen(
-    vm: HomeVM,
+    vm: LoginVM,
     activity: ComponentActivity,
     navController: NavController
 ) {

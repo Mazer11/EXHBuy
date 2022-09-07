@@ -22,22 +22,16 @@ import com.mazer.exhbuy.data.db.FirestoreDao
 import com.mazer.exhbuy.ui.components.EventCard
 import com.mazer.exhbuy.ui.components.HomeChips
 import com.mazer.exhbuy.ui.components.MyTextField
-import com.mazer.exhbuy.ui.screens.login.LogInScreen
-import com.mazer.exhbuy.viewmodels.HomeVM
+import com.mazer.exhbuy.viewmodels.LoginVM
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    vm: HomeVM,
+    //vm: HomeVM,
 ) {
     val mAuth = FirebaseAuth.getInstance()
 
-    if (mAuth.currentUser != null) {
-        HomeList(navController = navController, accountInfo = mAuth.currentUser)
-    }
-    else {
-        LogInScreen(navController = navController, vm = vm)
-    }
+    HomeList(navController = navController, accountInfo = mAuth.currentUser)
 
 }
 
@@ -83,7 +77,9 @@ fun HomeList(
         modifier = Modifier.fillMaxSize()
     ) {
         Column(
-            modifier = Modifier.padding(it).fillMaxSize()
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
         ) {
             Box(
                 modifier = Modifier

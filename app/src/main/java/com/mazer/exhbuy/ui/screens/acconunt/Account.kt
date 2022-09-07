@@ -7,10 +7,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import com.mazer.exhbuy.ui.navigation.NavigationRouts
 
 @Composable
-fun AccountScreen(){
+fun AccountScreen(
+    navController: NavController
+){
     val mAuth = FirebaseAuth.getInstance()
 
     Box(
@@ -19,6 +23,7 @@ fun AccountScreen(){
     ) {
         Button(onClick = {
             mAuth.signOut()
+            navController.navigate(NavigationRouts.LOGIN.route)
         }) {
             Text(text = "Sign Out")
         }

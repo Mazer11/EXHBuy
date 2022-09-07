@@ -14,10 +14,11 @@ import com.mazer.exhbuy.ui.screens.exdetails.ExhibitionScreen
 import com.mazer.exhbuy.ui.screens.home.CreatingScreen
 import com.mazer.exhbuy.ui.screens.home.HomeScreen
 import com.mazer.exhbuy.ui.screens.home.SearchingScreen
+import com.mazer.exhbuy.ui.screens.login.LogInScreen
 import com.mazer.exhbuy.ui.screens.login.RegistrationScreen
 import com.mazer.exhbuy.ui.screens.settings.SettingsScreen
 import com.mazer.exhbuy.ui.screens.shoppongcart.SaleScreen
-import com.mazer.exhbuy.viewmodels.HomeVM
+import com.mazer.exhbuy.viewmodels.LoginVM
 
 @Composable
 fun NavGraph(
@@ -33,13 +34,25 @@ fun NavGraph(
         composable(
             route = NavigationRouts.ACCOUNT.route
         ) {
-            AccountScreen()
+            AccountScreen(
+                navController = navController
+            )
+        }
+
+        composable(
+            route = NavigationRouts.LOGIN.route
+        ) {
+            val vm = hiltViewModel<LoginVM>()
+            LogInScreen(
+                navController = navController,
+                vm = vm
+            )
         }
 
         composable(
             route = NavigationRouts.REGISTRATION.route
         ) {
-            val vm = hiltViewModel<HomeVM>()
+            val vm = hiltViewModel<LoginVM>()
             RegistrationScreen(
                 vm = vm,
                 activity = activity,
@@ -56,9 +69,8 @@ fun NavGraph(
         composable(
             route = NavigationRouts.HOME.route
         ) {
-            val vm = hiltViewModel<HomeVM>()
+            val vm = hiltViewModel<LoginVM>()
             HomeScreen(
-                vm = vm,
                 navController = navController
             )
         }
