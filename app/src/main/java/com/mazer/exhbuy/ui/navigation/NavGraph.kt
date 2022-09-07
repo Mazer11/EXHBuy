@@ -29,7 +29,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = NavigationRouts.HOME.route
+        startDestination = NavigationRouts.LOGIN.route
     ) {
         composable(
             route = NavigationRouts.ACCOUNT.route

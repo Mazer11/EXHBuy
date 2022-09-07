@@ -23,7 +23,10 @@ fun AccountScreen(
     ) {
         Button(onClick = {
             mAuth.signOut()
-            navController.navigate(NavigationRouts.LOGIN.route)
+            val startRoute =navController.graph.startDestinationId
+            navController.popBackStack(destinationId = startRoute, inclusive = true)
+            navController.navigate(NavigationRouts.LOGIN.route){
+            }
         }) {
             Text(text = "Sign Out")
         }

@@ -23,7 +23,6 @@ fun LogInScreen(
     var phoneNumber by remember { mutableStateOf("") }
     val mAuth = FirebaseAuth.getInstance()
 
-
     if (mAuth.currentUser != null) {
         if (vm.isLoadingState.value == true)
             Box(
