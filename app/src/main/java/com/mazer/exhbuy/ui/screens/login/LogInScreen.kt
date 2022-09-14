@@ -2,15 +2,19 @@ package com.mazer.exhbuy.ui.screens.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
-import com.mazer.exhbuy.ui.components.MyTextField
 import com.mazer.exhbuy.viewmodels.LoginVM
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -20,22 +24,9 @@ fun LogInScreen(
     vm: LoginVM
 ) {
     var password by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
-    val mAuth = FirebaseAuth.getInstance()
+    var email by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
 
-    if (mAuth.currentUser != null) {
-        if (vm.isLoadingState.value == true)
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.primary,
-                    strokeWidth = 2.dp
-                )
-            }
-        else navController.navigate(NavigationRouts.HOME.route)
-    } else {
         Scaffold(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -43,45 +34,62 @@ fun LogInScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
 
-                Text(
-                    text = "Skip",
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(end = 8.dp, top = 8.dp)
-                        .clickable {
-                            navController.navigate(NavigationRouts.HOME.route)
-                        }
-                )
-
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)
+                    modifier = Modifier
+                        .padding(top = 8.dp, start = 16.dp, end = 16.dp)
                 ) {
                     Spacer(modifier = Modifier.height(250.dp))
-                    MyTextField(
-                        hint = "Phone number",
-                        onTextValueChange = { phoneNumber = it }
+
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = { Text(text = "Email Address") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }
+                        ),
+                        modifier = Modifier.fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    MyTextField(
-                        hint = "Password",
-                        onTextValueChange = { password = it }
+
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text(text = "Password") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            }
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
                     )
-                    Button(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        onClick = {
-                            /*TODO*/
-                        }
+
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        Text(text = "Log In")
-                    }
-                    Button(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        onClick = {
-                            /*TODO*/
+                        Button(
+                            onClick = {
+                                /*TODO*/
+                            }
+                        ) {
+                            Text(text = "Log In")
                         }
-                    ) {
-                        Text(text = "Log In with Google")
                     }
                 }
                 Text(
@@ -91,9 +99,9 @@ fun LogInScreen(
                             navController.navigate(NavigationRouts.REGISTRATION.route)
                         }
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 16.dp)
+                        .padding(bottom = 24.dp)
                 )
-            }
+//            }
         }
     }
 }

@@ -8,19 +8,12 @@ import androidx.core.app.ComponentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.mazer.exhbuy.EXHBuyApp
-import com.mazer.exhbuy.R
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -31,40 +24,13 @@ class LoginVM @Inject constructor() : ViewModel() {
     private val mAuth = FirebaseAuth.getInstance()
     var verificationOtp = ""
 
-    private val _isLoadingState: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    private val _isOtpSended: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
     }
-    val isLoadingState: LiveData<Boolean> = _isLoadingState
+    val isOtpSended: LiveData<Boolean> = _isOtpSended
 
     @Inject
     lateinit var application: EXHBuyApp
-
-    init {
-        _isLoadingState.value = true
-
-//        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-//            try {
-//                val account = task.getResult(ApiException::class.java)
-//                if (account != null) {
-//                    firebaseAuthWithGoogle(account.idToken!!)
-//                }
-//            } catch (e: ApiException) {
-//                Log.d("GoogleSignIn", "Api exception")
-//                Toast.makeText(
-//                    applicationContext,
-//                    "Can't authenticate with Google",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-
-        viewModelScope.launch {
-            delay(1000)
-            _isLoadingState.value = false
-        }
-
-    }
 
     fun sendPhone(
         phoneNumber: String,
@@ -103,6 +69,7 @@ class LoginVM @Inject constructor() : ViewModel() {
                         "Otp Send Successfully",
                         Toast.LENGTH_SHORT
                     ).show()
+                    _isOtpSended.value = true
                 }
             }).build()
         PhoneAuthProvider.verifyPhoneNumber(options)
@@ -122,7 +89,9 @@ class LoginVM @Inject constructor() : ViewModel() {
                         "Verification Successful",
                         Toast.LENGTH_SHORT
                     ).show()
-                    navController.navigate(NavigationRouts.HOME.route)
+                    navController.navigate(route = NavigationRouts.HOME.route){
+                        popUpTo(NavigationRouts.HOME.route){inclusive = true}
+                    }
                 } else
                     Toast.makeText(
                         context,
@@ -139,49 +108,4 @@ class LoginVM @Inject constructor() : ViewModel() {
             navController.navigate(NavigationRouts.HOME.route)
         }
     }
-
-    fun signInWithGoogle(
-        activity: ComponentActivity
-    ) {
-        val signIngClient = getClient(activity)
-        launcher.launch(signIngClient.signInIntent)
-    }
-
-    fun firebaseAuthWithGoogle(
-        idToken: String,
-        context: Context,
-        navController: NavController
-    ) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener() {
-                if (it.isSuccessful) {
-                    Toast.makeText(
-                        context,
-                        "Verification Successful",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    checkAuthState(navController)
-                } else
-                    Toast.makeText(
-                        context,
-                        "Something went wrong",
-                        Toast.LENGTH_SHORT
-                    ).show()
-            }
-    }
-
-    //Google authentication
-    fun getClient(
-        activity: ComponentActivity
-    ): GoogleSignInClient {
-        val gso = GoogleSignInOptions
-            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(activity.resources.getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        return GoogleSignIn.getClient(activity, gso)
-    }
-
 }

@@ -13,9 +13,9 @@ import com.mazer.exhbuy.ui.navigation.NavigationRouts
 
 @Composable
 fun AccountScreen(
-    navController: NavController
+    navController: NavController,
+    mAuth: FirebaseAuth
 ){
-    val mAuth = FirebaseAuth.getInstance()
 
     Box(
         contentAlignment = Alignment.Center,
@@ -25,8 +25,7 @@ fun AccountScreen(
             mAuth.signOut()
             val startRoute =navController.graph.startDestinationId
             navController.popBackStack(destinationId = startRoute, inclusive = true)
-            navController.navigate(NavigationRouts.LOGIN.route){
-            }
+            navController.navigate(NavigationRouts.HOME.route)
         }) {
             Text(text = "Sign Out")
         }

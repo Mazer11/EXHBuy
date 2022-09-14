@@ -8,25 +8,20 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 
 @Composable
-fun BottomBar(navController: NavHostController) {
+fun BottomBar(
+    stateValue: MutableState<String>
+) {
     val screens = listOf(
         NavigationRouts.HOME,
         NavigationRouts.CREATING,
         NavigationRouts.SALE,
     )
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
 
     var bottomBarSize by remember { mutableStateOf(70.dp) }
-    bottomBarSize = if (currentDestination?.route !in listOf(
+    bottomBarSize = if (stateValue.value.lowercase() !in listOf(
             "home", "creating", "sale"
         )
     )
@@ -40,8 +35,7 @@ fun BottomBar(navController: NavHostController) {
         screens.forEach { screen ->
             AddItem(
                 screen = screen,
-                currentDestination = currentDestination,
-                navController = navController
+                stateValue = stateValue
             )
         }
     }
@@ -50,8 +44,7 @@ fun BottomBar(navController: NavHostController) {
 @Composable
 fun RowScope.AddItem(
     screen: NavigationRouts,
-    currentDestination: NavDestination?,
-    navController: NavHostController
+    stateValue: MutableState<String>
 ) {
     NavigationBarItem(
         icon = {
@@ -60,14 +53,9 @@ fun RowScope.AddItem(
                 contentDescription = "Navigation Icon"
             )
         },
-        selected = currentDestination?.hierarchy?.any {
-            it.route == screen.route
-        } == true,
+        selected = stateValue.value.contentEquals(screen.route),
         onClick = {
-            navController.navigate(screen.route) {
-                popUpTo(navController.graph.findStartDestination().id)
-                launchSingleTop = true
-            }
+            stateValue.value = screen.route.uppercase()
         }
     )
 }
