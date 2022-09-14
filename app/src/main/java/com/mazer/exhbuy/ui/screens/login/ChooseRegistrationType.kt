@@ -24,11 +24,11 @@ fun ChooseRegistrationType(
 
             Button(
                 onClick = {
-                    currentState.value = "GOOGLE"
+                    currentState.value = "EMAIL"
                 }
             ) {
                 Text(
-                    text = "Authenticate with Google"
+                    text = "Authenticate with email address"
                 )
             }
 
@@ -40,10 +40,9 @@ fun ChooseRegistrationType(
                 }
             ) {
                 Text(
-                    text = "Authenticate with phone"
+                    text = "Authenticate with phone number"
                 )
             }
-
         }
     }
 }

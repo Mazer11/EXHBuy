@@ -1,53 +1,48 @@
 package com.mazer.exhbuy.ui.navigation
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.core.app.ComponentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.firebase.auth.FirebaseAuth
 import com.mazer.exhbuy.EXHBuyApp
 import com.mazer.exhbuy.ui.screens.acconunt.AccountScreen
 import com.mazer.exhbuy.ui.screens.acconunt.FavoriteScreen
 import com.mazer.exhbuy.ui.screens.acconunt.HistoryScreen
 import com.mazer.exhbuy.ui.screens.exdetails.ExhibitionScreen
-import com.mazer.exhbuy.ui.screens.home.CreatingScreen
 import com.mazer.exhbuy.ui.screens.home.HomeScreen
 import com.mazer.exhbuy.ui.screens.home.SearchingScreen
-import com.mazer.exhbuy.ui.screens.login.LogInScreen
 import com.mazer.exhbuy.ui.screens.login.RegistrationScreen
 import com.mazer.exhbuy.ui.screens.settings.SettingsScreen
-import com.mazer.exhbuy.ui.screens.shoppongcart.SaleScreen
-import com.mazer.exhbuy.viewmodels.RegistrationVM
+import com.mazer.exhbuy.viewmodels.LoginVM
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
     activity: ComponentActivity,
-    application: EXHBuyApp
+    application: EXHBuyApp,
+    mAuth: FirebaseAuth
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = NavigationRouts.LOGIN.route
+        startDestination = NavigationRouts.HOME.route
     ) {
-
         composable(
-            route = NavigationRouts.LOGIN.route
+            route = NavigationRouts.ACCOUNT.route
         ) {
-            val vm = hiltViewModel<RegistrationVM>()
-            LogInScreen(
+            AccountScreen(
                 navController = navController,
-                vm = vm
+                mAuth = mAuth
             )
         }
 
         composable(
             route = NavigationRouts.REGISTRATION.route
         ) {
-            val vm = hiltViewModel<RegistrationVM>()
+            val vm = hiltViewModel<LoginVM>()
             RegistrationScreen(
                 vm = vm,
                 activity = activity,
@@ -56,33 +51,20 @@ fun NavGraph(
         }
 
         composable(
-            route = NavigationRouts.ACCOUNT.route
-        ) {
-            AccountScreen()
-        }
-
-        composable(
-            route = NavigationRouts.SALE.route
-        ) {
-            SaleScreen()
-        }
-
-        composable(
             route = NavigationRouts.HOME.route
         ) {
-            HomeScreen(navController = navController)
+            val vm = hiltViewModel<LoginVM>()
+            HomeScreen(
+                navController = navController,
+                mAuth = mAuth,
+                vm = vm
+            )
         }
 
         composable(
             route = NavigationRouts.SETTINGS.route
         ) {
             SettingsScreen()
-        }
-
-        composable(
-            route = NavigationRouts.CREATING.route
-        ) {
-            CreatingScreen()
         }
 
         composable(

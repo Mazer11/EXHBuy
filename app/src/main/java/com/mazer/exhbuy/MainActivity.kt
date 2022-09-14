@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.mazer.exhbuy.ui.components.BottomBar
 import com.mazer.exhbuy.ui.navigation.NavGraph
 import com.mazer.exhbuy.ui.theme.EXHBuyTheme
@@ -23,26 +24,22 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var application: EXHBuyApp
 
-    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             val navController = rememberNavController()
-            Log.d("StartApp", "In Main")
+            val mAuth = FirebaseAuth.getInstance()
 
             EXHBuyTheme(
                 useDarkTheme = isSystemInDarkTheme()
             ) {
-                Scaffold(
-                    bottomBar = { BottomBar(navController = navController) }
-                ) {
-                    NavGraph(
-                        navController = navController,
-                        activity = this,
-                        application = application
-                    )
-                }
+                NavGraph(
+                    navController = navController,
+                    activity = this,
+                    application = application,
+                    mAuth = mAuth
+                )
             }
         }
     }

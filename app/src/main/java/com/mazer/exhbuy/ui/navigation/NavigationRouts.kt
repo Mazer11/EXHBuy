@@ -57,6 +57,6 @@ sealed class NavigationRouts(
     )
 
     object LOGIN: NavigationRouts(
-        route = "LogIn"
+        route = "login"
     )
 }
