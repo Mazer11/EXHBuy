@@ -24,7 +24,7 @@ fun RegistrationScreen(
     Scaffold(modifier = Modifier.fillMaxSize()) {
         when (registrationType.value) {
             "NONE" -> ChooseRegistrationType(registrationType)
-            "EMAIL" -> RegistrationEmailState(registrationType, vm)
+            "EMAIL" -> RegistrationEmailState(vm)
             else -> RegistrationPhoneState(vm, activity, navController)
         }
     }

@@ -30,6 +30,14 @@ fun RegistrationPhoneState(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
+    val isPhoneValid by derivedStateOf {
+        phoneNumber.length > 9
+    }
+
+    val isOtpValid by derivedStateOf {
+        otpVal.length == 6
+    }
+
     val showOtp = vm.isOtpSended.observeAsState()
 
     Column(
@@ -60,6 +68,7 @@ fun RegistrationPhoneState(
                 value = phoneNumber,
                 onValueChange = { phoneNumber = it },
                 label = { Text(text = "Phone number") },
+                isError = isPhoneValid.not(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
@@ -77,9 +86,9 @@ fun RegistrationPhoneState(
         }
 
         Button(
+            enabled = isPhoneValid,
             onClick = {
-                if (phoneNumber.isNotEmpty())
-                    vm.sendPhone(phoneNumber, context, activity, navController)
+                vm.sendPhone(phoneNumber, context, activity, navController)
             }
         ) {
             Text(
@@ -94,6 +103,7 @@ fun RegistrationPhoneState(
                 value = otpVal,
                 onValueChange = { otpVal = it },
                 label = { Text(text = "Verification code") },
+                isError = isOtpValid.not(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
@@ -110,6 +120,7 @@ fun RegistrationPhoneState(
             )
 
             Button(
+                enabled = isOtpValid,
                 onClick = {
                     if (otpVal != "")
                         vm.verifyOtp(otpVal, context, navController)
