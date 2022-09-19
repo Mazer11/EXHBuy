@@ -38,7 +38,7 @@ fun HomeScreen(
     val currentState = remember{ mutableStateOf("HOME") }
 
     if (mAuth.currentUser == null)
-        LogInScreen(navController = navController, vm = vm)
+        LogInScreen(navController = navController, vm = vm, auth = mAuth)
     else {
         Scaffold(
             modifier = Modifier.fillMaxSize(),

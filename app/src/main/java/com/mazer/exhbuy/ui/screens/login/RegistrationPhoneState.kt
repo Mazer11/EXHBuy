@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -79,6 +81,15 @@ fun RegistrationPhoneState(
                         focusManager.clearFocus()
                     }
                 ),
+                trailingIcon = {
+                    if (phoneNumber.isNotBlank())
+                        IconButton(onClick = { phoneNumber = "" }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Make field clear"
+                            )
+                        }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 16.dp)

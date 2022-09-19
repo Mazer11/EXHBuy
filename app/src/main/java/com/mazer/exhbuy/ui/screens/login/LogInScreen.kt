@@ -1,21 +1,32 @@
 package com.mazer.exhbuy.ui.screens.login
 
+import android.util.Log
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.mazer.exhbuy.R
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import com.mazer.exhbuy.viewmodels.LoginVM
@@ -24,23 +35,23 @@ import com.mazer.exhbuy.viewmodels.LoginVM
 @Composable
 fun LogInScreen(
     navController: NavController,
-    vm: LoginVM
+    vm: LoginVM,
+    auth: FirebaseAuth
 ) {
+    val context = LocalContext.current
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
-    val isLoginEnabled = remember{ mutableStateOf(false) }
+    val isLoginEnabled = remember { mutableStateOf(false) }
+    val isPasswordVisible = remember { mutableStateOf(false) }
 
-    val isLoginValid by derivedStateOf{
+    val isLoginValid by derivedStateOf {
         Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     val isPasswordValid by derivedStateOf {
-        password.length > 8
-        //other rules
+        password.length in 8..20
     }
-
-    // val showPassword = remember { mutableStateOf(false) }
 
     isLoginEnabled.value = isLoginValid && isPasswordValid
 
@@ -65,14 +76,20 @@ fun LogInScreen(
                     singleLine = true,
                     isError = isLoginValid.not(),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next
+                        keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
                     ),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }
-                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }),
+                    trailingIcon = {
+                        if (email.isNotBlank())
+                            IconButton(onClick = { email = "" }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Make field clear"
+                                )
+                            }
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -83,14 +100,26 @@ fun LogInScreen(
                     isError = isPasswordValid.not(),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
+                        keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
                     ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            focusManager.clearFocus()
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
+                    }),
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            isPasswordVisible.value = isPasswordVisible.value.not()
+                        }) {
+                            Icon(
+                                imageVector = if (isPasswordVisible.value)
+                                    Icons.Filled.VisibilityOff
+                                else Icons.Filled.Visibility,
+                                contentDescription = "Show password"
+                            )
                         }
-                    ),
+                    },
+                    visualTransformation = if (isPasswordVisible.value)
+                        VisualTransformation.None
+                    else PasswordVisualTransformation(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp)
@@ -99,9 +128,25 @@ fun LogInScreen(
                 Button(
                     enabled = isLoginEnabled.value,
                     onClick = {
-                        /*TODO*/
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp, bottom = 8.dp)
+                        auth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    Toast.makeText(
+                                        context,
+                                        "Logged in successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    navController.navigate(NavigationRouts.HOME.route)
+                                } else
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to log in",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                            }
+                    }, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 8.dp)
                 ) {
                     Text(text = stringResource(R.string.login))
                 }
@@ -109,21 +154,17 @@ fun LogInScreen(
                 Button(
                     onClick = {
                         navController.navigate(NavigationRouts.REGISTRATION.route)
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                    }, modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.registration))
                 }
             }
-            Text(
-                text = stringResource(R.string.forgot_password),
-                modifier = Modifier
-                    .clickable {
-                        /*TODO*/
-                    }
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 24.dp)
-            )
+            Text(text = stringResource(R.string.forgot_password), modifier = Modifier
+                .clickable {
+                    /*TODO*/
+                }
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 24.dp))
         }
     }
 }

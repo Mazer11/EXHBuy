@@ -21,7 +21,7 @@ import javax.inject.Inject
 class LoginVM @Inject constructor() : ViewModel() {
 
     lateinit var launcher: ActivityResultLauncher<Intent>
-    private val mAuth = FirebaseAuth.getInstance()
+    val mAuth = FirebaseAuth.getInstance()
     var verificationOtp = ""
 
     private val _isOtpSended: MutableLiveData<Boolean> by lazy {
