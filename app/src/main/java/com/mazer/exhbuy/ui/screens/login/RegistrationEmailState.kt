@@ -1,6 +1,7 @@
 package com.mazer.exhbuy.ui.screens.login
 
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -19,15 +21,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.mazer.exhbuy.R
+import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import com.mazer.exhbuy.viewmodels.LoginVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationEmailState(
-    vm: LoginVM
+    vm: LoginVM,
+    navController: NavController
 ) {
-
+    val context = LocalContext.current
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
@@ -42,7 +47,6 @@ fun RegistrationEmailState(
 
     val isPasswordValid by derivedStateOf {
         password.value.length > 8
-        //other rules
     }
 
     val isConfirmPasswordValid by derivedStateOf {
@@ -156,7 +160,25 @@ fun RegistrationEmailState(
             )
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    vm.mAuth.createUserWithEmailAndPassword(email.value, password.value)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                Toast.makeText(
+                                    context,
+                                    "Registration was successfully done",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                navController.navigate(NavigationRouts.HOME.route)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Registration was failed. Try again later",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
+                },
                 enabled = isLoginValid && isConfirmPasswordValid,
                 modifier = Modifier
                     .fillMaxWidth()

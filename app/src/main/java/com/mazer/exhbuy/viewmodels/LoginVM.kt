@@ -38,6 +38,7 @@ class LoginVM @Inject constructor() : ViewModel() {
         activity: ComponentActivity,
         navController: NavController
     ) {
+        mAuth.useAppLanguage()
         val options = PhoneAuthOptions.newBuilder(mAuth)
             .setPhoneNumber("+7$phoneNumber")
             .setTimeout(60L, TimeUnit.SECONDS)

@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ComponentActivity
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.auth.FirebaseAuth
@@ -34,11 +35,12 @@ fun HomeScreen(
     navController: NavController,
     mAuth: FirebaseAuth,
     vm: LoginVM,
+    mainActivity: ComponentActivity
 ) {
     val currentState = remember{ mutableStateOf("HOME") }
 
     if (mAuth.currentUser == null)
-        LogInScreen(navController = navController, vm = vm, auth = mAuth)
+        LogInScreen(navController = navController, vm = vm, auth = mAuth, activity = mainActivity)
     else {
         Scaffold(
             modifier = Modifier.fillMaxSize(),

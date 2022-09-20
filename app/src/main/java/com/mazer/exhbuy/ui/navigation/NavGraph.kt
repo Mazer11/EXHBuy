@@ -57,7 +57,8 @@ fun NavGraph(
             HomeScreen(
                 navController = navController,
                 mAuth = mAuth,
-                vm = vm
+                vm = vm,
+                mainActivity = activity
             )
         }
 

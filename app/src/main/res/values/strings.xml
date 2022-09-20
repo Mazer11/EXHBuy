@@ -7,4 +7,6 @@
     <string name="email_address">Email address</string>
     <string name="confirm">Confirm</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
 </resources>
