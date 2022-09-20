@@ -21,7 +21,7 @@ import javax.inject.Inject
 class LoginVM @Inject constructor() : ViewModel() {
 
     lateinit var launcher: ActivityResultLauncher<Intent>
-    private val mAuth = FirebaseAuth.getInstance()
+    val mAuth = FirebaseAuth.getInstance()
     var verificationOtp = ""
 
     private val _isOtpSended: MutableLiveData<Boolean> by lazy {
@@ -38,6 +38,7 @@ class LoginVM @Inject constructor() : ViewModel() {
         activity: ComponentActivity,
         navController: NavController
     ) {
+        mAuth.useAppLanguage()
         val options = PhoneAuthOptions.newBuilder(mAuth)
             .setPhoneNumber("+7$phoneNumber")
             .setTimeout(60L, TimeUnit.SECONDS)

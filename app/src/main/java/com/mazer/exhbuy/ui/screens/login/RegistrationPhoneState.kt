@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -29,6 +31,14 @@ fun RegistrationPhoneState(
     var phoneNumber by remember { mutableStateOf("") }
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+
+    val isPhoneValid by derivedStateOf {
+        phoneNumber.length > 9
+    }
+
+    val isOtpValid by derivedStateOf {
+        otpVal.length == 6
+    }
 
     val showOtp = vm.isOtpSended.observeAsState()
 
@@ -60,6 +70,7 @@ fun RegistrationPhoneState(
                 value = phoneNumber,
                 onValueChange = { phoneNumber = it },
                 label = { Text(text = "Phone number") },
+                isError = isPhoneValid.not(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
@@ -70,6 +81,15 @@ fun RegistrationPhoneState(
                         focusManager.clearFocus()
                     }
                 ),
+                trailingIcon = {
+                    if (phoneNumber.isNotBlank())
+                        IconButton(onClick = { phoneNumber = "" }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Make field clear"
+                            )
+                        }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 16.dp)
@@ -77,9 +97,9 @@ fun RegistrationPhoneState(
         }
 
         Button(
+            enabled = isPhoneValid,
             onClick = {
-                if (phoneNumber.isNotEmpty())
-                    vm.sendPhone(phoneNumber, context, activity, navController)
+                vm.sendPhone(phoneNumber, context, activity, navController)
             }
         ) {
             Text(
@@ -94,6 +114,7 @@ fun RegistrationPhoneState(
                 value = otpVal,
                 onValueChange = { otpVal = it },
                 label = { Text(text = "Verification code") },
+                isError = isOtpValid.not(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
@@ -110,6 +131,7 @@ fun RegistrationPhoneState(
             )
 
             Button(
+                enabled = isOtpValid,
                 onClick = {
                     if (otpVal != "")
                         vm.verifyOtp(otpVal, context, navController)
