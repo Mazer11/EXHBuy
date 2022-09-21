@@ -1,5 +1,7 @@
 package com.mazer.exhbuy.ui.screens.login
 
+import android.net.Uri
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.mazer.exhbuy.R
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import com.mazer.exhbuy.viewmodels.LoginVM
@@ -34,19 +37,25 @@ fun RegistrationEmailState(
 ) {
     val context = LocalContext.current
     val email = remember { mutableStateOf("") }
+    val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val isPasswordVisible = remember { mutableStateOf(false) }
     val isConfirmPasswordVisible = remember { mutableStateOf(false) }
     val isRegistrationEnabled = remember { mutableStateOf(false) }
+    val TAG = "registration_email"
 
-    val isLoginValid by derivedStateOf {
+    val isEmailValid by derivedStateOf {
         Patterns.EMAIL_ADDRESS.matcher(email.value).matches()
     }
 
+    val isUsernameValid by derivedStateOf {
+        username.value.length in 4..20
+    }
+
     val isPasswordValid by derivedStateOf {
-        password.value.length > 8
+        password.value.length in 8..20
     }
 
     val isConfirmPasswordValid by derivedStateOf {
@@ -55,7 +64,8 @@ fun RegistrationEmailState(
                 && password.value.isNotBlank()
     }
 
-    isRegistrationEnabled.value = isLoginValid && isPasswordValid
+    isRegistrationEnabled.value =
+        isEmailValid && isPasswordValid && isConfirmPasswordValid && isUsernameValid
 
     Scaffold(
         modifier = Modifier
@@ -75,7 +85,7 @@ fun RegistrationEmailState(
                 onValueChange = { email.value = it },
                 label = { Text(text = stringResource(id = R.string.email_address)) },
                 singleLine = true,
-                isError = isLoginValid.not(),
+                isError = isEmailValid.not(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
@@ -88,12 +98,42 @@ fun RegistrationEmailState(
                         IconButton(onClick = { email.value = "" }) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = "Make field clear"
+                                contentDescription = "Made field clear"
                             )
                         }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = username.value,
+                onValueChange = { username.value = it },
+                label = { Text(text = stringResource(id = R.string.username)) },
+                singleLine = true,
+                isError = isUsernameValid.not(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) }
+                ),
+                trailingIcon = {
+                    if (username.value.isNotBlank())
+                        IconButton(onClick = { username.value = "" }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Made field clear"
+                            )
+                        }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(8.dp))
+
 
             OutlinedTextField(
                 value = password.value,
@@ -123,10 +163,10 @@ fun RegistrationEmailState(
                 visualTransformation = if (isPasswordVisible.value)
                     VisualTransformation.None
                 else PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(Modifier.height(8.dp))
 
             OutlinedTextField(
                 value = confirmPassword.value,
@@ -163,12 +203,23 @@ fun RegistrationEmailState(
                 onClick = {
                     vm.mAuth.createUserWithEmailAndPassword(email.value, password.value)
                         .addOnCompleteListener {
+                            val updateRequest = userProfileChangeRequest {
+                                displayName = username.value
+                                //photoUri = Uri.parse("")
+                            }
+
                             if (it.isSuccessful) {
                                 Toast.makeText(
                                     context,
                                     "Registration was successfully done",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                vm.mAuth.currentUser!!.sendEmailVerification()
+                                vm.mAuth.currentUser!!.updateProfile(updateRequest)
+                                    .addOnCompleteListener { task ->
+                                        if(task.isSuccessful)
+                                            Log.d(TAG, "User profile updated.")
+                                    }
                                 navController.navigate(NavigationRouts.HOME.route)
                             } else {
                                 Toast.makeText(
@@ -179,7 +230,7 @@ fun RegistrationEmailState(
                             }
                         }
                 },
-                enabled = isLoginValid && isConfirmPasswordValid,
+                enabled = isRegistrationEnabled.value,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp)

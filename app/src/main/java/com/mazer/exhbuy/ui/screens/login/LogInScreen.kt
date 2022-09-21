@@ -344,7 +344,7 @@ fun PhoneLoginForm(
             enabled = isOtpValid,
             onClick = {
                 if (otpVal != "")
-                    vm.verifyOtp(otpVal, context, navController)
+                    vm.verifyOtp(otp = otpVal, context = context, navController =  navController)
             }
         ) {
             Text(

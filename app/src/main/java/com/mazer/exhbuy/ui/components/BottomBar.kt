@@ -53,7 +53,7 @@ fun RowScope.AddItem(
                 contentDescription = "Navigation Icon"
             )
         },
-        selected = stateValue.value.contentEquals(screen.route),
+        selected = stateValue.value.lowercase() == screen.route,
         onClick = {
             stateValue.value = screen.route.uppercase()
         }
