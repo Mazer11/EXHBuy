@@ -1,5 +1,6 @@
 package com.mazer.exhbuy.ui.screens.login
 
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -40,9 +41,12 @@ fun LogInScreen(
     navController: NavController,
     vm: LoginVM,
     auth: FirebaseAuth,
-    activity: androidx.core.app.ComponentActivity
+    activity: ComponentActivity
 ) {
     val loginType = remember { mutableStateOf("EMAIL") }
+    val email = remember { mutableStateOf("") }
+    val TAG = "LogInScreen"
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -104,7 +108,11 @@ fun LogInScreen(
                     .align(Alignment.Center)
             ) {
                 when (loginType.value) {
-                    "EMAIL" -> EmailLoginForm(auth = auth, navController = navController)
+                    "EMAIL" -> EmailLoginForm(
+                        auth = auth,
+                        navController = navController,
+                        email = email
+                    )
                     "PHONE" -> PhoneLoginForm(
                         vm = vm,
                         activity = activity,
@@ -120,12 +128,29 @@ fun LogInScreen(
                     Text(text = stringResource(R.string.registration))
                 }
             }
-            Text(text = stringResource(R.string.forgot_password), modifier = Modifier
-                .clickable {
-                    /*TODO*/
-                }
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 24.dp))
+            Text(
+                text = stringResource(R.string.forgot_password), modifier = Modifier
+                    .clickable {
+                        if (email.value.isNotBlank())
+                            auth
+                                .sendPasswordResetEmail(email.value)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful)
+                                        Log.d(TAG, "Email reset sent.")
+                                    else
+                                        Log.e(TAG, "Failed to send reset")
+                                }
+                        else
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Please, enter your email address",
+                                    Toast.LENGTH_LONG
+                                )
+                                .show()
+                    }
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 24.dp))
         }
     }
 }
@@ -133,11 +158,11 @@ fun LogInScreen(
 @Composable
 fun EmailLoginForm(
     auth: FirebaseAuth,
+    email: MutableState<String>,
     navController: NavController
 ) {
     val context = LocalContext.current
     val password = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val isPasswordVisible = remember { mutableStateOf(false) }
 
@@ -344,7 +369,7 @@ fun PhoneLoginForm(
             enabled = isOtpValid,
             onClick = {
                 if (otpVal != "")
-                    vm.verifyOtp(otpVal, context, navController)
+                    vm.verifyOtp(otp = otpVal, context = context, navController = navController)
             }
         ) {
             Text(

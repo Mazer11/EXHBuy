@@ -12,13 +12,16 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ComponentActivity
 import androidx.navigation.NavController
+import com.mazer.exhbuy.R
 import com.mazer.exhbuy.viewmodels.LoginVM
 
 @Composable
@@ -29,11 +32,16 @@ fun RegistrationPhoneState(
 ) {
     var otpVal by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
+    val username = remember { mutableStateOf("") }
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
+    val isUsernameValid by derivedStateOf {
+        username.value.length in 4..20
+    }
+
     val isPhoneValid by derivedStateOf {
-        phoneNumber.length > 9
+        phoneNumber.length == 10
     }
 
     val isOtpValid by derivedStateOf {
@@ -47,10 +55,35 @@ fun RegistrationPhoneState(
         verticalArrangement = Arrangement.aligned(Alignment.CenterVertically),
         modifier = Modifier.fillMaxSize()
     ) {
+        OutlinedTextField(
+            value = username.value,
+            onValueChange = { username.value = it },
+            label = { Text(text = stringResource(id = R.string.username)) },
+            singleLine = true,
+            isError = isUsernameValid.not(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) }
+            ),
+            trailingIcon = {
+                if (username.value.isNotBlank())
+                    IconButton(onClick = { username.value = "" }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Made field clear"
+                        )
+                    }
+            },
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+        )
+
+        Spacer(Modifier.height(8.dp))
+
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = "+7",
@@ -61,7 +94,7 @@ fun RegistrationPhoneState(
                         color = MaterialTheme.colorScheme.secondary,
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .padding(horizontal = 16.dp, vertical = 17.dp)
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
             )
 
             Spacer(modifier = Modifier.width(4.dp))
@@ -96,8 +129,10 @@ fun RegistrationPhoneState(
             )
         }
 
+        Spacer(Modifier.height(8.dp))
+
         Button(
-            enabled = isPhoneValid,
+            enabled = isPhoneValid && isUsernameValid,
             onClick = {
                 vm.sendPhone(phoneNumber, context, activity, navController)
             }
@@ -130,11 +165,13 @@ fun RegistrationPhoneState(
                     .padding(horizontal = 16.dp)
             )
 
+            Spacer(Modifier.height(16.dp))
+
             Button(
                 enabled = isOtpValid,
                 onClick = {
                     if (otpVal != "")
-                        vm.verifyOtp(otpVal, context, navController)
+                        vm.verifyOtp(otpVal, username, context, navController)
                 }
             ) {
                 Text(

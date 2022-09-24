@@ -2,8 +2,10 @@ package com.mazer.exhbuy.viewmodels
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.runtime.MutableState
 import androidx.core.app.ComponentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.mazer.exhbuy.EXHBuyApp
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +26,7 @@ class LoginVM @Inject constructor() : ViewModel() {
     lateinit var launcher: ActivityResultLauncher<Intent>
     val mAuth = FirebaseAuth.getInstance()
     var verificationOtp = ""
+    val TAG = "login_view_model"
 
     private val _isOtpSended: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
@@ -78,20 +82,39 @@ class LoginVM @Inject constructor() : ViewModel() {
 
     fun verifyOtp(
         otp: String,
+        userName: MutableState<String>? = null,
         context: Context,
         navController: NavController
     ) {
         val credential = PhoneAuthProvider.getCredential(verificationOtp, otp)
-        FirebaseAuth.getInstance().signInWithCredential(credential)
+        mAuth.signInWithCredential(credential)
             .addOnCompleteListener() {
+                val isNewUser = mAuth.currentUser?.displayName == null
+                val updateRequest: UserProfileChangeRequest
+                if (isNewUser) {
+                    updateRequest = userProfileChangeRequest {
+                        displayName = userName?.value ?: "John Doe"
+                    }
+                    mAuth.currentUser!!.updateProfile(updateRequest)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful)
+                                Log.d(TAG, "User profile updated.")
+                            else
+                                Log.e(
+                                    TAG,
+                                    "Get error while updating profile: ${task.exception.toString()}"
+                                )
+                        }
+                }
                 if (it.isSuccessful) {
                     Toast.makeText(
                         context,
                         "Verification Successful",
                         Toast.LENGTH_SHORT
                     ).show()
-                    navController.navigate(route = NavigationRouts.HOME.route){
-                        popUpTo(NavigationRouts.HOME.route){inclusive = true}
+
+                    navController.navigate(route = NavigationRouts.HOME.route) {
+                        popUpTo(NavigationRouts.HOME.route) { inclusive = true }
                     }
                 } else
                     Toast.makeText(
