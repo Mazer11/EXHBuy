@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mazer.exhbuy.data.model.EventData
@@ -22,13 +23,13 @@ fun EventCard(
             .height(130.dp)
             .clickable { /*TODO*/ }
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(all = 8.dp)
         ) {
             Column(
-                modifier = Modifier.weight(3f)
+                modifier = Modifier.align(Alignment.TopStart)
             ) {
                 Text(
                     text = "${event.startDate} - ${event.endDate}",
@@ -43,20 +44,23 @@ fun EventCard(
                     text = event.location,
                     style = AppTypography.titleSmall
                 )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "${event.price} $",
-                    style = AppTypography.titleMedium
-                )
             }
+
+            Text(
+                text = "${event.price} $",
+                style = AppTypography.titleMedium,
+                color = MaterialTheme.colorScheme.tertiary,
+                modifier = Modifier.align(Alignment.BottomStart)
+            )
+
             Surface(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxHeight()
-                    .width(70.dp),
+                    .width(90.dp)
+                    .align(Alignment.CenterEnd),
             ) {
-                /*TODO Image*/
+
             }
         }
     }

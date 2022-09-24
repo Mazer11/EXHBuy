@@ -217,10 +217,15 @@ fun RegistrationEmailState(
                                 vm.mAuth.currentUser!!.sendEmailVerification()
                                 vm.mAuth.currentUser!!.updateProfile(updateRequest)
                                     .addOnCompleteListener { task ->
-                                        if(task.isSuccessful)
+                                        if (task.isSuccessful)
                                             Log.d(TAG, "User profile updated.")
                                     }
-                                navController.navigate(NavigationRouts.HOME.route)
+                                navController.popBackStack(
+                                    destinationId = navController.graph.startDestinationId,
+                                    inclusive = true
+                                )
+                                navController.navigate(NavigationRouts.HOME.route) {
+                                }
                             } else {
                                 Toast.makeText(
                                     context,

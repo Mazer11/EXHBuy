@@ -65,7 +65,7 @@ fun NavGraph(
         composable(
             route = NavigationRouts.SETTINGS.route
         ) {
-            SettingsScreen()
+            SettingsScreen(application = application, navController = navController)
         }
 
         composable(
