@@ -19,4 +19,12 @@ object FirestoreDao {
                 events.clear()
             }
     }
+
+    fun getTicketTypesForEvent(
+        event: EventData
+    ){
+        /* TODO I need to learn how to get id or path of this document of document in collection */
+        db.collection("Events").document("").id
+    }
+
 }
