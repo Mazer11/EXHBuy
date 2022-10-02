@@ -74,7 +74,8 @@ fun CreatingScreen(
             .padding(all = 16.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 80.dp)
         ) {
@@ -191,9 +192,7 @@ fun CreatingScreen(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-
                 CreateTickets(ticketTypesList)
-
             }
 
             if (ticketTypesList.isNullOrEmpty().not()) {
@@ -213,7 +212,6 @@ fun CreatingScreen(
                     Column(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-
                         ticketTypesList.forEachIndexed { index, ticket ->
                             Text(
                                 text = "${index + 1}. " +
@@ -224,6 +222,14 @@ fun CreatingScreen(
                             )
                         }
 
+                        Button(
+                            onClick = {
+                                ticketTypesList.clear()
+                            },
+                            modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
+                        ) {
+                            Text(text = "Clear")
+                        }
                     }
 
                 }
