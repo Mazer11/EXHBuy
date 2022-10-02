@@ -70,10 +70,11 @@ fun CreatingScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(all = 16.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 80.dp)
         ) {
 
             Text(

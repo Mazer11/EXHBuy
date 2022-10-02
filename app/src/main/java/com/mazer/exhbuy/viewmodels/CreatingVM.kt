@@ -7,6 +7,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.mazer.exhbuy.data.model.EventData
 import com.mazer.exhbuy.data.model.TicketType
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class CreatingVM @Inject constructor() : ViewModel() {
@@ -27,6 +29,7 @@ class CreatingVM @Inject constructor() : ViewModel() {
                 event_location = eventLocation,
                 date_of_start = startDate,
                 date_of_end = endDate,
+                creating_date = SimpleDateFormat("dd.MM.yyyy").format(Date())
             )
         )
             .addOnSuccessListener { documentReference ->

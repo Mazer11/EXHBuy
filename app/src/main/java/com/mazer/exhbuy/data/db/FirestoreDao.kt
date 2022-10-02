@@ -14,7 +14,7 @@ object FirestoreDao {
     fun getEvents(
         events: MutableList<EventData>
     ) {
-        db.collection("Events").get()
+        db.collection("Events").whereEqualTo("approved", true).get()
             .addOnSuccessListener {
                 events.clear()
                 it.forEach { document ->
