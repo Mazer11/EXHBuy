@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -103,6 +105,15 @@ fun CreatingScreen(
                         keyboardActions = KeyboardActions(
                             onNext = { focusManager.moveFocus(FocusDirection.Next) }
                         ),
+                        trailingIcon = {
+                            if (eventName.value.isNotBlank())
+                                IconButton(onClick = { eventName.value = "" }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Make field clear"
+                                    )
+                                }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(all = 8.dp)
@@ -120,6 +131,15 @@ fun CreatingScreen(
                         keyboardActions = KeyboardActions(
                             onDone = { focusManager.clearFocus() }
                         ),
+                        trailingIcon = {
+                            if (eventLocation.value.isNotBlank())
+                                IconButton(onClick = { eventLocation.value = "" }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Make field clear"
+                                    )
+                                }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 8.dp, end = 8.dp)

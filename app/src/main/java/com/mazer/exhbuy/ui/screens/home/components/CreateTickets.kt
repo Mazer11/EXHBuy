@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -26,7 +26,7 @@ fun CreateTickets(
 
     val ticketTypeName = remember { mutableStateOf("") }
     val ticketTypeCount = remember { mutableStateOf(0) }
-    val ticketTypePrice = remember { mutableStateOf(0.0f) }
+    val ticketTypePrice = remember { mutableStateOf(0f) }
     val isEnabled = remember { mutableStateOf(true) }
     val isTicketTypeDataValid by derivedStateOf {
         ticketTypeName.value.isNotBlank()
@@ -52,6 +52,15 @@ fun CreateTickets(
             keyboardActions = KeyboardActions(
                 onNext = { focusManager.moveFocus(FocusDirection.Next) }
             ),
+            trailingIcon = {
+                if (ticketTypeName.value.isNotBlank())
+                    IconButton(onClick = { ticketTypeName.value = "" }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Make field clear"
+                        )
+                    }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
@@ -74,6 +83,15 @@ fun CreateTickets(
                 keyboardActions = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Right) }
                 ),
+                trailingIcon = {
+                    if (ticketTypePrice.value > 0f)
+                        IconButton(onClick = { ticketTypePrice.value = 0f }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Make field clear"
+                            )
+                        }
+                },
                 modifier = Modifier
                     .weight(0.3f)
                     .padding(end = 8.dp)
@@ -92,6 +110,15 @@ fun CreateTickets(
                 keyboardActions = KeyboardActions(
                     onDone = { focusManager.clearFocus() }
                 ),
+                trailingIcon = {
+                    if (ticketTypeCount.value > 0)
+                        IconButton(onClick = { ticketTypeCount.value = 0 }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Make field clear"
+                            )
+                        }
+                },
                 modifier = Modifier.weight(0.3f)
             )
         }
