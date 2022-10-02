@@ -35,17 +35,9 @@ fun CreateTickets(
                 && ticketTypePrice.value > 0.0f
     }
 
-    if (isTicketTypeDataValid) {
-        val ticketType = TicketType(
-            ticket_type_name = ticketTypeName.value,
-            ticket_type_count = ticketTypeCount.value,
-            ticket_type_price = ticketTypePrice.value
-        )
-        if (ticketsList.contains(ticketType).not())
-            ticketsList.add(ticketType)
-    }
-
-    Column(modifier = Modifier.fillMaxWidth().padding(all = 8.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(all = 8.dp)) {
 
         OutlinedTextField(
             value = ticketTypeName.value,
@@ -65,7 +57,9 @@ fun CreateTickets(
                 .padding(vertical = 8.dp)
         )
 
-        Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)) {
 
             OutlinedTextField(
                 value = ticketTypePrice.value.toString(),
@@ -80,7 +74,9 @@ fun CreateTickets(
                 keyboardActions = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Right) }
                 ),
-                modifier = Modifier.weight(0.3f).padding(end = 8.dp)
+                modifier = Modifier
+                    .weight(0.3f)
+                    .padding(end = 8.dp)
             )
 
             OutlinedTextField(
@@ -90,7 +86,7 @@ fun CreateTickets(
                 singleLine = true,
                 enabled = isEnabled.value,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Ascii,
+                    keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
@@ -111,26 +107,13 @@ fun CreateTickets(
                     )
                     if (ticketsList.contains(ticketType).not()) {
                         ticketsList.add(ticketType)
-                        isEnabled.value = !isEnabled.value
+                        ticketTypeName.value = ""
+                        ticketTypeCount.value = 0
+                        ticketTypePrice.value = 0.0f
                     }
                 }
             ) {
                 Text(text = "Add")
-            }
-        else
-            Button(
-                enabled = isTicketTypeDataValid,
-                onClick = {
-                    val ticketType = TicketType(
-                        ticket_type_name = ticketTypeName.value,
-                        ticket_type_count = ticketTypeCount.value,
-                        ticket_type_price = ticketTypePrice.value
-                    )
-                    ticketsList.remove(ticketType)
-                    isEnabled.value = !isEnabled.value
-                }
-            ) {
-                Text(text = "Delete")
             }
     }
 }

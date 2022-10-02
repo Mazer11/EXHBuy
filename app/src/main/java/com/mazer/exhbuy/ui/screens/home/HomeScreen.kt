@@ -27,6 +27,7 @@ import com.mazer.exhbuy.ui.components.HomeChips
 import com.mazer.exhbuy.ui.components.MyTextField
 import com.mazer.exhbuy.ui.screens.login.LogInScreen
 import com.mazer.exhbuy.ui.screens.shoppongcart.SaleScreen
+import com.mazer.exhbuy.viewmodels.CreatingVM
 import com.mazer.exhbuy.viewmodels.LoginVM
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,13 +35,14 @@ import com.mazer.exhbuy.viewmodels.LoginVM
 fun HomeScreen(
     navController: NavController,
     mAuth: FirebaseAuth,
-    vm: LoginVM,
+    loginVM: LoginVM,
+    creatingVM: CreatingVM,
     mainActivity: ComponentActivity
 ) {
     val currentState = remember{ mutableStateOf("HOME") }
 
     if (mAuth.currentUser == null)
-        LogInScreen(navController = navController, vm = vm, auth = mAuth, activity = mainActivity)
+        LogInScreen(navController = navController, vm = loginVM, auth = mAuth, activity = mainActivity)
     else {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -50,7 +52,7 @@ fun HomeScreen(
         ) {
             when(currentState.value) {
                 "HOME" -> HomeList(navController = navController, accountInfo = mAuth.currentUser)
-                "CREATING" -> CreatingScreen()
+                "CREATING" -> CreatingScreen(vm = creatingVM)
                 "SALE" -> SaleScreen()
             }
         }
@@ -106,7 +108,7 @@ fun HomeList(
             HomeChips()
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(eventList) { item: EventData ->
-                    EventCard(event = item)
+                    EventCard(event = item, navController = navController)
                 }
             }
         }

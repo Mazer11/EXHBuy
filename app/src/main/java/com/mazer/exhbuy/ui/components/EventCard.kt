@@ -8,20 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.mazer.exhbuy.data.model.EventData
+import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import com.mazer.exhbuy.ui.theme.AppTypography
 
 @ExperimentalMaterial3Api
 @Composable
 fun EventCard(
-    event: EventData
+    event: EventData,
+    navController: NavController
 ) {
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth()
             .height(130.dp)
-            .clickable { /*TODO*/ }
+            .clickable {
+                navController.navigate(
+                    route = "${NavigationRouts.EXHIBITION.route}/${event.firestore_id}",
+                )
+            }
     ) {
         Box(
             modifier = Modifier
