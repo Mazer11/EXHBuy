@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.mazer.exhbuy.R
 
 @Composable
 fun ChooseRegistrationType(
@@ -28,7 +30,7 @@ fun ChooseRegistrationType(
                 }
             ) {
                 Text(
-                    text = "Authenticate with email address"
+                    text = stringResource(R.string.auth_with_email)
                 )
             }
 
@@ -40,7 +42,7 @@ fun ChooseRegistrationType(
                 }
             ) {
                 Text(
-                    text = "Authenticate with phone number"
+                    text = stringResource(R.string.auth_with_phone)
                 )
             }
         }

@@ -4,10 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.core.app.ComponentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.mazer.exhbuy.EXHBuyApp
+import com.mazer.exhbuy.data.model.EventData
 import com.mazer.exhbuy.ui.screens.acconunt.AccountScreen
 import com.mazer.exhbuy.ui.screens.acconunt.FavoriteScreen
 import com.mazer.exhbuy.ui.screens.acconunt.HistoryScreen
@@ -16,6 +19,7 @@ import com.mazer.exhbuy.ui.screens.home.HomeScreen
 import com.mazer.exhbuy.ui.screens.home.SearchingScreen
 import com.mazer.exhbuy.ui.screens.login.RegistrationScreen
 import com.mazer.exhbuy.ui.screens.settings.SettingsScreen
+import com.mazer.exhbuy.viewmodels.CreatingVM
 import com.mazer.exhbuy.viewmodels.LoginVM
 
 @Composable
@@ -53,12 +57,14 @@ fun NavGraph(
         composable(
             route = NavigationRouts.HOME.route
         ) {
-            val vm = hiltViewModel<LoginVM>()
+            val loginVM = hiltViewModel<LoginVM>()
+            val creatingVM = hiltViewModel<CreatingVM>()
             HomeScreen(
                 navController = navController,
                 mAuth = mAuth,
-                vm = vm,
-                mainActivity = activity
+                loginVM = loginVM,
+                mainActivity = activity,
+                creatingVM = creatingVM
             )
         }
 
@@ -69,9 +75,15 @@ fun NavGraph(
         }
 
         composable(
-            route = NavigationRouts.EXHIBITION.route
-        ) {
-            ExhibitionScreen()
+            route = "${NavigationRouts.EXHIBITION.route}/{eventId}",
+            arguments = listOf(navArgument("eventId"){ type = NavType.StringType })
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString("eventId")?.let {
+                ExhibitionScreen(
+                    navController = navController,
+                    event_id = it
+                )
+            }
         }
         composable(
             route = NavigationRouts.FAVORITE.route

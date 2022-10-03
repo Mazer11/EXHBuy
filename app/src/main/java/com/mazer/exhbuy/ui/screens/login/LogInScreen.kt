@@ -338,7 +338,7 @@ fun PhoneLoginForm(
         }
     ) {
         Text(
-            text = "Send verification code"
+            text = stringResource(R.string.send_verification_code)
         )
     }
 
@@ -348,7 +348,7 @@ fun PhoneLoginForm(
         OutlinedTextField(
             value = otpVal,
             onValueChange = { otpVal = it },
-            label = { Text(text = "Verification code") },
+            label = { Text(text = stringResource(R.string.verification_code)) },
             isError = isOtpValid.not(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -373,7 +373,7 @@ fun PhoneLoginForm(
             }
         ) {
             Text(
-                text = "Verify"
+                text = stringResource(R.string.verify)
             )
         }
     }

@@ -1,131 +1,264 @@
 package com.mazer.exhbuy.ui.screens.home
 
-import android.content.ContentValues.TAG
-import android.util.Log
+import android.app.DatePickerDialog
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.mazer.exhbuy.data.model.EventData
-import com.mazer.exhbuy.ui.components.MyTextField
+import com.mazer.exhbuy.R
+import com.mazer.exhbuy.data.model.TicketType
+import com.mazer.exhbuy.ui.screens.home.components.CreateTickets
 import com.mazer.exhbuy.ui.theme.AppTypography
+import com.mazer.exhbuy.viewmodels.CreatingVM
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreatingScreen() {
-    val db = Firebase.firestore
-    val dbCollection = db.collection("Events")
+fun CreatingScreen(
+    vm: CreatingVM
+) {
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    val headlinesStyle = AppTypography.labelMedium
+    val headlineColor = MaterialTheme.colorScheme.onSurface
 
-    var eventName by remember { mutableStateOf("") }
-    var eventLocation by remember { mutableStateOf("") }
-    var ticketsCount by remember { mutableStateOf("0") }
-    var startDate by remember { mutableStateOf("") }
-    var endDate by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("0") }
+    val eventName = remember { mutableStateOf("") }
+    val eventLocation = remember { mutableStateOf("") }
+    val calendar = Calendar.getInstance()
+    val startDay = calendar.get(Calendar.DAY_OF_MONTH)
+    val startMonth = calendar.get(Calendar.MONTH)
+    val startYear = calendar.get(Calendar.YEAR)
+    val endDay = calendar.get(Calendar.DAY_OF_MONTH)
+    val endMonth = calendar.get(Calendar.MONTH)
+    val endYear = calendar.get(Calendar.YEAR)
+    val startDate = remember { mutableStateOf("") }
+    val endDate = remember { mutableStateOf("") }
+    val startDatePickerDialog = DatePickerDialog(
+        context,
+        { _, y, m, d ->
+            startDate.value = "$d.${m + 1}.$y"
+        }, startYear, startMonth, startDay
+    )
+    val endDatePickerDialog = DatePickerDialog(
+        context,
+        { _, y, m, d ->
+            endDate.value = "$d.${m + 1}.$y"
+        }, endYear, endMonth, endDay
+    )
 
-    val textFieldModifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp)
+    val ticketTypesList = remember { mutableStateListOf<TicketType>() }
 
-    Scaffold {
+    val isCreatingButtonValid by derivedStateOf {
+        eventName.value.isNotBlank() && eventName.value.length >= 3
+                && eventLocation.value.isNotBlank()
+                && startDate.value.isNotBlank()
+                && endDate.value.isNotBlank()
+                && ticketTypesList.isNotEmpty()
+    }
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(all = 16.dp)
+    ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(it)
-                .padding(all = 16.dp)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 80.dp)
         ) {
-            //Event Name
-            MyTextField(
-                hint = "Event name",
-                onTextValueChange = {
-                    eventName = it
-                },
-                modifier = textFieldModifier
+
+            Text(
+                text = stringResource(R.string.general),
+                style = headlinesStyle,
+                color = headlineColor,
             )
-            //Event Location
-            MyTextField(
-                hint = "Event location",
-                onTextValueChange = {
-                    eventLocation = it
-                },
-                modifier = textFieldModifier
-            )
-            //Count of tickets
-            MyTextField(
-                hint = "Tickets count",
-                isNumericInput = true,
-                onTextValueChange = {
-                    ticketsCount = it
-                },
-                modifier = textFieldModifier
-            )
-            //Date of start
-            MyTextField(
-                hint = "Date of beginning",
-                isNumericInput = true,
-                onTextValueChange = {
-                    startDate = it
-                },
-                modifier = textFieldModifier
-            )
-            //Date of end
-            MyTextField(
-                hint = "Date of ending",
-                isNumericInput = true,
-                onTextValueChange = {
-                    endDate = it
-                },
-                modifier = textFieldModifier
-            )
-            //Price of ticket
-            MyTextField(
-                hint = "Ticket price",
-                isNumericInput = true,
-                onTextValueChange = {
-                    price = it
-                },
-                modifier = textFieldModifier
-            )
-            Button(
-                onClick = {
-                    if (
-                        eventName != "" &&
-                        eventLocation != "" &&
-                        ticketsCount != "-1" &&
-                        startDate != "" &&
-                        endDate != "" &&
-                        price != "-1"
+
+            Surface(
+                tonalElevation = 8.dp,
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    OutlinedTextField(
+                        value = eventName.value,
+                        onValueChange = { eventName.value = it },
+                        singleLine = true,
+                        label = { Text(text = stringResource(R.string.event_name)) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Next) }
+                        ),
+                        trailingIcon = {
+                            if (eventName.value.isNotBlank())
+                                IconButton(onClick = { eventName.value = "" }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Make field clear"
+                                    )
+                                }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 8.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = eventLocation.value,
+                        onValueChange = { eventLocation.value = it },
+                        singleLine = true,
+                        label = { Text(text = stringResource(R.string.event_location)) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focusManager.clearFocus() }
+                        ),
+                        trailingIcon = {
+                            if (eventLocation.value.isNotBlank())
+                                IconButton(onClick = { eventLocation.value = "" }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Make field clear"
+                                    )
+                                }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp)
+                    )
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 8.dp)
                     ) {
-                        dbCollection.add(
-                            EventData(
-                                eventName = eventName,
-                                location = eventLocation,
-                                ticketsCount = ticketsCount.toInt(),
-                                startDate = startDate,
-                                endDate = endDate,
-                                price = price.toInt()
-                            )
+
+                        OutlinedTextField(
+                            value = startDate.value,
+                            onValueChange = {},
+                            enabled = false,
+                            singleLine = true,
+                            label = { Text(text = stringResource(R.string.date_of_start)) },
+                            modifier = Modifier
+                                .clickable { startDatePickerDialog.show() }
+                                .weight(0.4f)
+                                .padding(end = 8.dp)
                         )
-                            .addOnSuccessListener { documentReference ->
-                                Log.d(
-                                    TAG,
-                                    "DocumentSnapshot added with ID: ${documentReference.id}"
-                                )
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(TAG, "Error adding document", e)
-                            }
+
+                        OutlinedTextField(
+                            value = endDate.value,
+                            onValueChange = {},
+                            enabled = false,
+                            singleLine = true,
+                            label = { Text(text = stringResource(R.string.date_of_end)) },
+                            modifier = Modifier
+                                .clickable { endDatePickerDialog.show() }
+                                .weight(0.4f)
+                        )
+
                     }
+                }
+            }
+
+            Text(
+                text = stringResource(R.string.tickets),
+                style = headlinesStyle,
+                color = headlineColor,
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            )
+
+            Surface(
+                tonalElevation = 8.dp,
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                CreateTickets(ticketTypesList)
+            }
+
+            if (ticketTypesList.isNullOrEmpty().not()) {
+                Text(
+                    text = stringResource(R.string.created_ticket_types),
+                    style = headlinesStyle,
+                    color = headlineColor,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                )
+
+                Surface(
+                    tonalElevation = 8.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        ticketTypesList.forEachIndexed { index, ticket ->
+                            Text(
+                                text = "${index + 1}. " +
+                                        "${ticket.ticket_type_count} pieces of " +
+                                        "${ticket.ticket_type_name} tickets by " +
+                                        "${ticket.ticket_type_price}$",
+                                modifier = Modifier.padding(all = 8.dp)
+                            )
+                        }
+
+                        Button(
+                            onClick = {
+                                ticketTypesList.clear()
+                            },
+                            modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
+                        ) {
+                            Text(text = stringResource(R.string.clear))
+                        }
+                    }
+
+                }
+            }
+
+            Text(
+                text = stringResource(R.string.images),
+                style = headlinesStyle,
+                color = headlineColor,
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            )
+
+            Button(
+                enabled = isCreatingButtonValid,
+                onClick = {
+                    vm.sendEventData(
+                        eventName = eventName.value,
+                        eventLocation = eventLocation.value,
+                        endDate = endDate.value,
+                        startDate = startDate.value,
+                        tickets = ticketTypesList
+                    )
                 }
             ) {
                 Text(
-                    text = "Add event",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = AppTypography.titleMedium,
+                    text = stringResource(R.string.add_event),
                 )
             }
         }

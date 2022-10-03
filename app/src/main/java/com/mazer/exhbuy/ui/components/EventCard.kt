@@ -8,20 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.mazer.exhbuy.data.model.EventData
+import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import com.mazer.exhbuy.ui.theme.AppTypography
 
 @ExperimentalMaterial3Api
 @Composable
 fun EventCard(
-    event: EventData
+    event: EventData,
+    navController: NavController
 ) {
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth()
             .height(130.dp)
-            .clickable { /*TODO*/ }
+            .clickable {
+                navController.navigate(
+                    route = "${NavigationRouts.EXHIBITION.route}/${event.firestore_id}",
+                )
+            }
     ) {
         Box(
             modifier = Modifier
@@ -32,26 +39,19 @@ fun EventCard(
                 modifier = Modifier.align(Alignment.TopStart)
             ) {
                 Text(
-                    text = "${event.startDate} - ${event.endDate}",
+                    text = "${event.date_of_start} - ${event.date_of_end}",
                     color = MaterialTheme.colorScheme.tertiary,
                     style = AppTypography.titleSmall
                 )
                 Text(
-                    text = event.eventName,
+                    text = event.event_name,
                     style = AppTypography.titleMedium
                 )
                 Text(
-                    text = event.location,
+                    text = event.event_location,
                     style = AppTypography.titleSmall
                 )
             }
-
-            Text(
-                text = "${event.price} $",
-                style = AppTypography.titleMedium,
-                color = MaterialTheme.colorScheme.tertiary,
-                modifier = Modifier.align(Alignment.BottomStart)
-            )
 
             Surface(
                 shape = RoundedCornerShape(12.dp),
@@ -60,7 +60,7 @@ fun EventCard(
                     .width(90.dp)
                     .align(Alignment.CenterEnd),
             ) {
-
+                /* TODO Add image of event */
             }
         }
     }
