@@ -13,9 +13,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.mazer.exhbuy.R
 import com.mazer.exhbuy.data.model.TicketType
 
 @Composable
@@ -42,7 +44,7 @@ fun CreateTickets(
         OutlinedTextField(
             value = ticketTypeName.value,
             onValueChange = { ticketTypeName.value = it },
-            label = { Text(text = "Ticket type name") },
+            label = { Text(text = stringResource(R.string.ticket_type_name)) },
             singleLine = true,
             enabled = isEnabled.value,
             keyboardOptions = KeyboardOptions(
@@ -73,7 +75,7 @@ fun CreateTickets(
             OutlinedTextField(
                 value = ticketTypePrice.value.toString(),
                 onValueChange = { ticketTypePrice.value = it.toFloat() },
-                label = { Text(text = "Price") },
+                label = { Text(text = stringResource(R.string.price)) },
                 singleLine = true,
                 enabled = isEnabled.value,
                 keyboardOptions = KeyboardOptions(
@@ -100,7 +102,7 @@ fun CreateTickets(
             OutlinedTextField(
                 value = ticketTypeCount.value.toString(),
                 onValueChange = { ticketTypeCount.value = it.toInt() },
-                label = { Text(text = "Count") },
+                label = { Text(text = stringResource(R.string.count)) },
                 singleLine = true,
                 enabled = isEnabled.value,
                 keyboardOptions = KeyboardOptions(

@@ -105,7 +105,7 @@ fun AccountScreen(
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Edit account info",
+                    text = stringResource(R.string.edit_account),
                     color = textButtonColor,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -116,7 +116,7 @@ fun AccountScreen(
                 Divider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.surface)
 
                 Text(
-                    text = "Upgrade to curator account",
+                    text = stringResource(R.string.upgrade_to_curator),
                     color = textButtonColor,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -127,7 +127,7 @@ fun AccountScreen(
                 Divider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.surface)
 
                 Text(
-                    text = "See favorites",
+                    text = stringResource(R.string.see_favorites),
                     color = textButtonColor,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -138,7 +138,7 @@ fun AccountScreen(
                 Divider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.surface)
 
                 Text(
-                    text = "Tickets history",
+                    text = stringResource(R.string.tickets_history),
                     color = textButtonColor,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -149,7 +149,7 @@ fun AccountScreen(
                 Divider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.surface)
 
                 Text(
-                    text = "Sign out",
+                    text = stringResource(R.string.sign_out),
                     color = textButtonColor,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -164,7 +164,7 @@ fun AccountScreen(
             }
 
             Text(
-                text = "Application settings",
+                text = stringResource(R.string.app_settings),
                 style = headlinesStyle,
                 color = headlineColor,
                 modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
@@ -176,7 +176,7 @@ fun AccountScreen(
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Settings",
+                    text = stringResource(R.string.settings),
                     color = textButtonColor,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
@@ -187,7 +187,7 @@ fun AccountScreen(
             }
 
             Text(
-                text = "Application info",
+                text = stringResource(R.string.app_info),
                 style = headlinesStyle,
                 color = headlineColor,
                 modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
@@ -212,7 +212,7 @@ fun AccountScreen(
                 Divider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.surface)
 
                 Text(
-                    text = "About us",
+                    text = stringResource(R.string.about_us),
                     color = textButtonColor,
                     textAlign = TextAlign.Start,
                     modifier = Modifier

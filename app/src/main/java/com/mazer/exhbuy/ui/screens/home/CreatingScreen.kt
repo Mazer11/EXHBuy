@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.mazer.exhbuy.R
 import com.mazer.exhbuy.data.model.TicketType
 import com.mazer.exhbuy.ui.screens.home.components.CreateTickets
 import com.mazer.exhbuy.ui.theme.AppTypography
@@ -31,6 +33,10 @@ fun CreatingScreen(
     vm: CreatingVM
 ) {
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    val headlinesStyle = AppTypography.labelMedium
+    val headlineColor = MaterialTheme.colorScheme.onSurface
+
     val eventName = remember { mutableStateOf("") }
     val eventLocation = remember { mutableStateOf("") }
     val calendar = Calendar.getInstance()
@@ -43,13 +49,13 @@ fun CreatingScreen(
     val startDate = remember { mutableStateOf("") }
     val endDate = remember { mutableStateOf("") }
     val startDatePickerDialog = DatePickerDialog(
-        LocalContext.current,
+        context,
         { _, y, m, d ->
             startDate.value = "$d.${m + 1}.$y"
         }, startYear, startMonth, startDay
     )
     val endDatePickerDialog = DatePickerDialog(
-        LocalContext.current,
+        context,
         { _, y, m, d ->
             endDate.value = "$d.${m + 1}.$y"
         }, endYear, endMonth, endDay
@@ -65,9 +71,6 @@ fun CreatingScreen(
                 && ticketTypesList.isNotEmpty()
     }
 
-    val headlinesStyle = AppTypography.labelMedium
-    val headlineColor = MaterialTheme.colorScheme.onSurface
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -81,7 +84,7 @@ fun CreatingScreen(
         ) {
 
             Text(
-                text = "General",
+                text = stringResource(R.string.general),
                 style = headlinesStyle,
                 color = headlineColor,
             )
@@ -98,7 +101,7 @@ fun CreatingScreen(
                         value = eventName.value,
                         onValueChange = { eventName.value = it },
                         singleLine = true,
-                        label = { Text(text = "Event name") },
+                        label = { Text(text = stringResource(R.string.event_name)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
@@ -124,7 +127,7 @@ fun CreatingScreen(
                         value = eventLocation.value,
                         onValueChange = { eventLocation.value = it },
                         singleLine = true,
-                        label = { Text(text = "Event location") },
+                        label = { Text(text = stringResource(R.string.event_location)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Done
@@ -158,7 +161,7 @@ fun CreatingScreen(
                             onValueChange = {},
                             enabled = false,
                             singleLine = true,
-                            label = { Text(text = "Date of start") },
+                            label = { Text(text = stringResource(R.string.date_of_start)) },
                             modifier = Modifier
                                 .clickable { startDatePickerDialog.show() }
                                 .weight(0.4f)
@@ -170,7 +173,7 @@ fun CreatingScreen(
                             onValueChange = {},
                             enabled = false,
                             singleLine = true,
-                            label = { Text(text = "Date of end") },
+                            label = { Text(text = stringResource(R.string.date_of_end)) },
                             modifier = Modifier
                                 .clickable { endDatePickerDialog.show() }
                                 .weight(0.4f)
@@ -181,7 +184,7 @@ fun CreatingScreen(
             }
 
             Text(
-                text = "Tickets",
+                text = stringResource(R.string.tickets),
                 style = headlinesStyle,
                 color = headlineColor,
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
@@ -197,7 +200,7 @@ fun CreatingScreen(
 
             if (ticketTypesList.isNullOrEmpty().not()) {
                 Text(
-                    text = "Created ticket types",
+                    text = stringResource(R.string.created_ticket_types),
                     style = headlinesStyle,
                     color = headlineColor,
                     modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
@@ -228,7 +231,7 @@ fun CreatingScreen(
                             },
                             modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
                         ) {
-                            Text(text = "Clear")
+                            Text(text = stringResource(R.string.clear))
                         }
                     }
 
@@ -236,7 +239,7 @@ fun CreatingScreen(
             }
 
             Text(
-                text = "Images",
+                text = stringResource(R.string.images),
                 style = headlinesStyle,
                 color = headlineColor,
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
@@ -255,7 +258,7 @@ fun CreatingScreen(
                 }
             ) {
                 Text(
-                    text = "Add event",
+                    text = stringResource(R.string.add_event),
                 )
             }
         }

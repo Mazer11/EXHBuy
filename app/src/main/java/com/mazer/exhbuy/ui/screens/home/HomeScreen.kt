@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.mazer.exhbuy.R
 import com.mazer.exhbuy.ui.navigation.NavigationRouts
 import com.mazer.exhbuy.data.model.EventData
 import com.mazer.exhbuy.data.db.FirestoreDao
@@ -95,7 +97,7 @@ fun HomeList(
                         singleLine = true,
                         label = {
                             Text(
-                                text = "Search events...",
+                                text = stringResource(R.string.search_events),
                                 style = AppTypography.bodyMedium,
                             )
                         },

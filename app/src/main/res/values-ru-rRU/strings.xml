@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EXHBuy</string>
+    <string name="forgot_password">Забыли пароль</string>
+    <string name="registration">Регистрация</string>
+    <string name="login">Войти</string>
+    <string name="password">Пароль</string>
+    <string name="email_address">Email</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="confirm_password">Повторить пароль</string>
+    <string name="email">Email</string>
+    <string name="phone">Номер телефона</string>
+    <string name="username">Имя пользователя</string>
+    <string name="account_management">Управление аккаунтом</string>
+    <string name="settings">Настройки</string>
+    <string name="dark_mode">Ночной режим</string>
+    <string name="language">Язык</string>
+    <string name="edit_account">Редактировать аккаунт</string>
+    <string name="upgrade_to_curator">Улучшить до куратора</string>
+    <string name="see_favorites">Избранное</string>
+    <string name="tickets_history">История билетов</string>
+    <string name="sign_out">Выйти из аккаунта</string>
+    <string name="app_settings">Настройки приложения</string>
+    <string name="app_info">О приложении</string>
+    <string name="about_us">О нас</string>
+    <string name="ticket_type_name">Название типа</string>
+    <string name="price">Цена</string>
+    <string name="count">Кол-во</string>
+    <string name="general">Основное</string>
+    <string name="event_name">Название события</string>
+    <string name="event_location">Адресс</string>
+    <string name="date_of_start">Дата начала</string>
+    <string name="date_of_end">Дата завершения</string>
+    <string name="tickets">Билеты</string>
+    <string name="created_ticket_types">Созданые билеты</string>
+    <string name="clear">Очистить</string>
+    <string name="images">Изображения</string>
+    <string name="add_event">Добавить событие</string>
+    <string name="search_events">Найти событие…</string>
+    <string name="auth_with_email">Зарегестрироваться с почтой</string>
+    <string name="auth_with_phone">Зарегестрироваться с номером телефона</string>
+    <string name="send_verification_code">Отправить код</string>
+    <string name="verification_code">Код подтверждения</string>
+    <string name="verify">Подтвердить</string>
+</resources>
