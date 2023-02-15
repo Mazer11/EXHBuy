@@ -1,2 +1,2 @@
 # EXHBuy
-Project for university.
+Abandoned
